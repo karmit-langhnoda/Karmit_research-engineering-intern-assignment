@@ -114,6 +114,7 @@ def get_timeline(
 # ─── Get Subreddit Breakdown ──────────────────────────────
 def get_subreddit_breakdown(
     post_ids:  Optional[list]  = None,
+    subreddit: Optional[str]   = None,
     ideology:  Optional[str]   = None,
     date_from: Optional[float] = None,
     date_to:   Optional[float] = None,
@@ -122,7 +123,9 @@ def get_subreddit_breakdown(
     con    = get_connection()
     where  = []
     params = []
-
+    if subreddit:
+        where.append("subreddit = ?")
+        params.append(subreddit)
     if ideology:
         where.append("author_flair_text = ?")
         params.append(ideology)

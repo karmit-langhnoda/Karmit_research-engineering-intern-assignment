@@ -44,6 +44,7 @@ def get_topic_clusters(
     # ── Clamp n_clusters ──────────────────────────────────
     # handles extreme values from slider
     n_clusters = max(2, min(n_clusters, min(50, len(ids) // 2)))
+
     # ── Normalize embeddings ──────────────────────────────
     embeddings_norm = normalize(embeddings)
 
@@ -71,18 +72,19 @@ def get_topic_clusters(
         if label not in cluster_texts:
             cluster_texts[label] = []
         cluster_texts[label].append(documents[i])
-    STOP_WORDS = {
-        "their", "about", "people", "would", "could",
-        "should", "which", "there", "these", "those",
-        "other", "where", "being", "after", "before",
-        "through", "between", "against", "during",
-        "https", "that", "have", "this", "with",
-        "from", "they", "will", "been", "were",
-        "when", "what", "your", "just", "more"
-    }   
+
     cluster_labels = {}
     for label, texts in cluster_texts.items():
         combined = " ".join(texts[:20])
+        STOP_WORDS = {
+            "their", "about", "people", "would", "could",
+            "should", "which", "there", "these", "those",
+            "other", "where", "being", "after", "before",
+            "through", "between", "against", "during",
+            "https", "that", "have", "this", "with",
+            "from", "they", "will", "been", "were",
+            "when", "what", "your", "just", "more"
+        }
         words = [
             w.lower() for w in combined.split()
             if len(w) > 4 and w.lower() not in STOP_WORDS

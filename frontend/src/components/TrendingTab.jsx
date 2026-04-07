@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import TopicCluster from './TopicCluster'
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid,
   Tooltip, ResponsiveContainer, BarChart, Bar, Cell
@@ -16,6 +17,7 @@ export default function TrendingTab() {
   const { filters } = useStore()
   const [data,    setData]    = useState(null)
   const [loading, setLoading] = useState(true)
+  const [view,    setView]    = useState('timeline')
 
   useEffect(() => {
     setLoading(true)
@@ -30,132 +32,160 @@ export default function TrendingTab() {
   return (
     <div className="flex flex-col gap-6">
 
-      {/* ── Timeline Chart ───────────────────────── */}
-      <Card title="📈 Post Activity Over Time">
-        <ResponsiveContainer width="100%" height={300}>
-          <AreaChart data={data.timeline}>
-            <defs>
-              <linearGradient id="colorPosts" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%"  stopColor="#4f46e5" stopOpacity={0.3} />
-                <stop offset="95%" stopColor="#4f46e5" stopOpacity={0}   />
-              </linearGradient>
-            </defs>
-            <CartesianGrid strokeDasharray="3 3" stroke="#2d3148" />
-            <XAxis
-              dataKey="date"
-              stroke="#8892b0"
-              tick={{ fontSize: 11 }}
-              tickFormatter={d => d.slice(5)}
-              interval={Math.floor(data.timeline.length / 8)}
-            />
-            <YAxis stroke="#8892b0" tick={{ fontSize: 11 }} />
-            <Tooltip
-              contentStyle={{
-                background: '#1a1d27',
-                border: '1px solid #2d3148',
-                borderRadius: '8px',
-                color: '#e2e8f0'
-              }}
-            />
-            <Area
-              type="monotone"
-              dataKey="post_count"
-              stroke="#4f46e5"
-              fill="url(#colorPosts)"
-              strokeWidth={2}
-              name="Posts"
-            />
-          </AreaChart>
-        </ResponsiveContainer>
-
-        {/* AI Summary */}
-        {data.summary && (
-          <AISummary text={data.summary} />
-        )}
-      </Card>
-
-      {/* ── Subreddit Breakdown ───────────────────── */}
-      <Card title="🏘️ Most Active Communities">
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart
-            data={data.subreddits}
-            layout="vertical"
-            margin={{ left: 20 }}
+      {/* ── View Toggle ──────────────────────────── */}
+      <div style={{ display: 'flex', gap: '8px' }}>
+        {[
+          { id: 'timeline', label: '📈 Timeline View'     },
+          { id: 'clusters', label: '🗺️ Topic Cluster Map' },
+        ].map(({ id, label }) => (
+          <button
+            key={id}
+            onClick={() => setView(id)}
+            style={{
+              padding:      '6px 16px',
+              borderRadius: '6px',
+              background:   view === id ? '#4f46e5' : '#1a1d27',
+              color:        view === id ? '#fff' : '#8892b0',
+              border:       '1px solid #2d3148',
+              cursor:       'pointer',
+              fontSize:     '13px'
+            }}
           >
-            <CartesianGrid strokeDasharray="3 3" stroke="#2d3148" />
-            <XAxis
-              type="number"
-              stroke="#8892b0"
-              tick={{ fontSize: 11 }}
-            />
-            <YAxis
-              type="category"
-              dataKey="subreddit"
-              stroke="#8892b0"
-              tick={{ fontSize: 11 }}
-              width={120}
-            />
-            <Tooltip
-              contentStyle={{
-                background: '#1a1d27',
-                border: '1px solid #2d3148',
-                borderRadius: '8px',
-                color: '#e2e8f0'
-              }}
-            />
-            <Bar dataKey="post_count" name="Posts" radius={[0, 4, 4, 0]}>
-              {data.subreddits.map((_, i) => (
-                <Cell key={i} fill={COLORS[i % COLORS.length]} />
-              ))}
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
-      </Card>
+            {label}
+          </button>
+        ))}
+      </div>
 
-      {/* ── Avg Score Timeline ────────────────────── */}
-      <Card title="⭐ Average Post Score Over Time">
-        <ResponsiveContainer width="100%" height={250}>
-          <AreaChart data={data.timeline}>
-            <defs>
-              <linearGradient id="colorScore" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%"  stopColor="#10b981" stopOpacity={0.3} />
-                <stop offset="95%" stopColor="#10b981" stopOpacity={0}   />
-              </linearGradient>
-            </defs>
-            <CartesianGrid strokeDasharray="3 3" stroke="#2d3148" />
-            <XAxis
-              dataKey="date"
-              stroke="#8892b0"
-              tick={{ fontSize: 11 }}
-              tickFormatter={d => d.slice(5)}
-              interval={Math.floor(data.timeline.length / 8)}
-            />
-            <YAxis stroke="#8892b0" tick={{ fontSize: 11 }} />
-            <Tooltip
-              contentStyle={{
-                background: '#1a1d27',
-                border: '1px solid #2d3148',
-                borderRadius: '8px',
-                color: '#e2e8f0'
-              }}
-            />
-            <Area
-              type="monotone"
-              dataKey="avg_score"
-              stroke="#10b981"
-              fill="url(#colorScore)"
-              strokeWidth={2}
-              name="Avg Score"
-            />
-          </AreaChart>
-        </ResponsiveContainer>
-      </Card>
+      {/* ── Timeline View ────────────────────────── */}
+      {view === 'timeline' && (
+        <>
+          {/* Timeline Chart */}
+          <Card title="📈 Post Activity Over Time">
+            <ResponsiveContainer width="100%" height={300}>
+              <AreaChart data={data.timeline}>
+                <defs>
+                  <linearGradient id="colorPosts" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%"  stopColor="#4f46e5" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="#4f46e5" stopOpacity={0}   />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="#2d3148" />
+                <XAxis
+                  dataKey="date"
+                  stroke="#8892b0"
+                  tick={{ fontSize: 11 }}
+                  tickFormatter={d => d.slice(5)}
+                  interval={Math.floor(data.timeline.length / 8)}
+                />
+                <YAxis stroke="#8892b0" tick={{ fontSize: 11 }} />
+                <Tooltip
+                  contentStyle={{
+                    background:   '#1a1d27',
+                    border:       '1px solid #2d3148',
+                    borderRadius: '8px',
+                    color:        '#e2e8f0'
+                  }}
+                />
+                <Area
+                  type="monotone"
+                  dataKey="post_count"
+                  stroke="#4f46e5"
+                  fill="url(#colorPosts)"
+                  strokeWidth={2}
+                  name="Posts"
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+            {data.summary && <AISummary text={data.summary} />}
+          </Card>
+
+          {/* Subreddit Breakdown */}
+          <Card title="🏘️ Most Active Communities">
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart
+                data={data.subreddits}
+                layout="vertical"
+                margin={{ left: 20 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" stroke="#2d3148" />
+                <XAxis
+                  type="number"
+                  stroke="#8892b0"
+                  tick={{ fontSize: 11 }}
+                />
+                <YAxis
+                  type="category"
+                  dataKey="subreddit"
+                  stroke="#8892b0"
+                  tick={{ fontSize: 11 }}
+                  width={120}
+                />
+                <Tooltip
+                  contentStyle={{
+                    background:   '#1a1d27',
+                    border:       '1px solid #2d3148',
+                    borderRadius: '8px',
+                    color:        '#e2e8f0'
+                  }}
+                />
+                <Bar dataKey="post_count" name="Posts" radius={[0, 4, 4, 0]}>
+                  {data.subreddits.map((_, i) => (
+                    <Cell key={i} fill={COLORS[i % COLORS.length]} />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </Card>
+
+          {/* Avg Score Timeline */}
+          <Card title="⭐ Average Post Score Over Time">
+            <ResponsiveContainer width="100%" height={250}>
+              <AreaChart data={data.timeline}>
+                <defs>
+                  <linearGradient id="colorScore" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%"  stopColor="#10b981" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="#10b981" stopOpacity={0}   />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="#2d3148" />
+                <XAxis
+                  dataKey="date"
+                  stroke="#8892b0"
+                  tick={{ fontSize: 11 }}
+                  tickFormatter={d => d.slice(5)}
+                  interval={Math.floor(data.timeline.length / 8)}
+                />
+                <YAxis stroke="#8892b0" tick={{ fontSize: 11 }} />
+                <Tooltip
+                  contentStyle={{
+                    background:   '#1a1d27',
+                    border:       '1px solid #2d3148',
+                    borderRadius: '8px',
+                    color:        '#e2e8f0'
+                  }}
+                />
+                <Area
+                  type="monotone"
+                  dataKey="avg_score"
+                  stroke="#10b981"
+                  fill="url(#colorScore)"
+                  strokeWidth={2}
+                  name="Avg Score"
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          </Card>
+        </>
+      )}
+
+      {/* ── Cluster View ─────────────────────────── */}
+      {view === 'clusters' && <TopicCluster />}
 
     </div>
   )
 }
 
-// ── Reusable Card ──────────────────────────────────────
+// ── Reusable Card ─────────────────────────────────────
 function Card({ title, children }) {
   return (
     <div style={{

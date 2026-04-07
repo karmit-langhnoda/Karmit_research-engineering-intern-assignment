@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid,
-  Tooltip, ResponsiveContainer, BarChart, Bar, Cell
+  Tooltip, ResponsiveContainer
 } from 'recharts'
 import useStore from '../store/useStore'
 import { getSearch } from '../api'
@@ -27,25 +27,26 @@ export default function SearchPanel() {
   if (!searchResults) return null
 
   const {
-    posts      = [],
-    timeline   = [],
-    subreddits = [],
-    ideologies = [],
-    domains    = [],
-    summary    = '',
-    related_queries = [],
-    total      = 0,
-    error      = null
+    posts             = [],
+    timeline          = [],
+    subreddits        = [],
+    ideologies        = [],
+    domains           = [],
+    summary           = '',
+    timeline_summary  = '',
+    related_queries   = [],
+    total             = 0,
+    error             = null,
+    core_topic        = ''
   } = searchResults
 
   // apply sort
   const sortedPosts = [...posts].sort((a, b) => {
     if (sortBy === 'score')    return b.score - a.score
     if (sortBy === 'comments') return b.num_comments - a.num_comments
-    return 0 // relevance = default order
+    return 0
   })
 
-  // re-filter with local filters
   const handleFilter = async () => {
     setIsSearching(true)
     try {
@@ -76,10 +77,12 @@ export default function SearchPanel() {
               🔍 "{searchQuery}"
             </h2>
             <p style={{ color: '#8892b0', fontSize: '13px', marginTop: '4px' }}>
-              {error
-                ? error
-                : `${total} posts found`
-              }
+              {error ? error : `${total} posts found`}
+              {core_topic && (
+                <span style={{ color: '#06b6d4', marginLeft: '8px' }}>
+                  · Core topic: {core_topic}
+                </span>
+              )}
               {searchResults.translated && (
                 <span style={{ color: '#4f46e5', marginLeft: '8px' }}>
                   · Translated from original query
@@ -274,7 +277,12 @@ export default function SearchPanel() {
               borderRadius: '12px',
               padding: '20px'
             }}>
-              <h3 style={{ color: '#e2e8f0', fontSize: '15px', fontWeight: '600', marginBottom: '16px' }}>
+              <h3 style={{
+                color: '#e2e8f0',
+                fontSize: '15px',
+                fontWeight: '600',
+                marginBottom: '16px'
+              }}>
                 📈 When were these posts made?
               </h3>
               <ResponsiveContainer width="100%" height={200}>
@@ -312,13 +320,33 @@ export default function SearchPanel() {
                   />
                 </AreaChart>
               </ResponsiveContainer>
+
+              {/* ── AI Summary under timeline ─────── */}
+              {timeline_summary && (
+                <div style={{
+                  marginTop:    '12px',
+                  padding:      '12px 16px',
+                  background:   '#0f1117',
+                  borderLeft:   '3px solid #4f46e5',
+                  borderRadius: '0 8px 8px 0',
+                }}>
+                  <span style={{ color: '#4f46e5', fontSize: '12px', fontWeight: '600' }}>
+                    AI SUMMARY
+                  </span>
+                  <p style={{ color: '#8892b0', fontSize: '13px', marginTop: '4px', lineHeight: '1.6' }}>
+                    {timeline_summary}
+                  </p>
+                </div>
+              )}
             </div>
           )}
 
           {/* Breakdown Row */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}>
-
-            {/* Subreddits */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr 1fr',
+            gap: '16px'
+          }}>
             <MiniCard title="🏘️ Communities">
               {subreddits.slice(0, 6).map((s, i) => (
                 <BreakdownRow
@@ -331,7 +359,6 @@ export default function SearchPanel() {
               ))}
             </MiniCard>
 
-            {/* Ideologies */}
             <MiniCard title="🧭 Ideologies">
               {ideologies.length === 0 ? (
                 <p style={{ color: '#8892b0', fontSize: '12px' }}>
@@ -350,7 +377,6 @@ export default function SearchPanel() {
               )}
             </MiniCard>
 
-            {/* Domains */}
             <MiniCard title="🔗 Sources">
               {domains.length === 0 ? (
                 <p style={{ color: '#8892b0', fontSize: '12px' }}>
@@ -454,7 +480,7 @@ function MiniCard({ title, children }) {
   )
 }
 
-// ── Breakdown Row with mini bar ───────────────────────
+// ── Breakdown Row ─────────────────────────────────────
 function BreakdownRow({ label, value, max, color }) {
   const pct = max > 0 ? (value / max) * 100 : 0
   return (
@@ -503,7 +529,6 @@ function PostRow({ post }) {
       onMouseLeave={e => e.currentTarget.style.borderColor = 'transparent'}
     >
       <div className="flex gap-3 items-start">
-        {/* Score */}
         <div style={{
           minWidth: '48px',
           textAlign: 'center',
@@ -516,9 +541,13 @@ function PostRow({ post }) {
           </div>
         </div>
 
-        {/* Content */}
         <div style={{ flex: 1 }}>
-          <div style={{ color: '#e2e8f0', fontSize: '13px', fontWeight: '500', lineHeight: '1.4' }}>
+          <div style={{
+            color: '#e2e8f0',
+            fontSize: '13px',
+            fontWeight: '500',
+            lineHeight: '1.4'
+          }}>
             {post.title}
           </div>
           <div style={{ color: '#8892b0', fontSize: '11px', marginTop: '4px' }}>
@@ -537,7 +566,6 @@ function PostRow({ post }) {
             · {post.num_comments} comments
           </div>
 
-          {/* Expanded body */}
           {expanded && post.selftext && (
             <div style={{
               marginTop: '8px',

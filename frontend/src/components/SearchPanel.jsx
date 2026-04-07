@@ -7,8 +7,8 @@ import useStore from '../store/useStore'
 import { getSearch } from '../api'
 
 const COLORS = [
-  '#4f46e5','#06b6d4','#10b981','#f59e0b',
-  '#ef4444','#8b5cf6','#ec4899','#14b8a6',
+  '#0b5fff','#0891b2','#0f766e','#d97706',
+  '#dc2626','#7c3aed','#db2777','#0f766e',
 ]
 
 export default function SearchPanel() {
@@ -66,25 +66,25 @@ export default function SearchPanel() {
 
       {/* ── Search Header ────────────────────────── */}
       <div style={{
-        background: '#1a1d27',
-        border: '1px solid #2d3148',
+        background: '#ffffff',
+        border: '1px solid #dbe4f0',
         borderRadius: '12px',
         padding: '16px'
       }}>
         <div className="flex justify-between items-start flex-wrap gap-3">
           <div>
-            <h2 style={{ color: '#e2e8f0', fontSize: '18px', fontWeight: '700' }}>
+            <h2 style={{ color: '#0f1b2d', fontSize: '18px', fontWeight: '700' }}>
               🔍 "{searchQuery}"
             </h2>
-            <p style={{ color: '#8892b0', fontSize: '13px', marginTop: '4px' }}>
+            <p style={{ color: '#5b6b82', fontSize: '13px', marginTop: '4px' }}>
               {error ? error : `${total} posts found`}
               {core_topic && (
-                <span style={{ color: '#06b6d4', marginLeft: '8px' }}>
+                <span style={{ color: '#0891b2', marginLeft: '8px' }}>
                   · Core topic: {core_topic}
                 </span>
               )}
               {searchResults.translated && (
-                <span style={{ color: '#4f46e5', marginLeft: '8px' }}>
+                <span style={{ color: '#0b5fff', marginLeft: '8px' }}>
                   · Translated from original query
                 </span>
               )}
@@ -96,8 +96,8 @@ export default function SearchPanel() {
             style={{
               padding: '6px 14px',
               borderRadius: '6px',
-              background: '#374151',
-              color: '#e2e8f0',
+              background: '#c5d2e6',
+              color: '#0f1b2d',
               border: 'none',
               cursor: 'pointer',
               fontSize: '13px'
@@ -111,16 +111,16 @@ export default function SearchPanel() {
         {!error && (
           <div className="flex gap-3 mt-4 flex-wrap items-end">
             <div>
-              <label style={{ color: '#8892b0', fontSize: '11px', display: 'block', marginBottom: '4px' }}>
+              <label style={{ color: '#5b6b82', fontSize: '11px', display: 'block', marginBottom: '4px' }}>
                 SUBREDDIT
               </label>
               <select
                 value={subreddit}
                 onChange={e => setSubreddit(e.target.value)}
                 style={{
-                  background: '#0f1117',
-                  border: '1px solid #2d3148',
-                  color: '#e2e8f0',
+                  background: '#f8fafc',
+                  border: '1px solid #dbe4f0',
+                  color: '#0f1b2d',
                   padding: '6px 10px',
                   borderRadius: '6px',
                   fontSize: '12px'
@@ -136,16 +136,16 @@ export default function SearchPanel() {
             </div>
 
             <div>
-              <label style={{ color: '#8892b0', fontSize: '11px', display: 'block', marginBottom: '4px' }}>
+              <label style={{ color: '#5b6b82', fontSize: '11px', display: 'block', marginBottom: '4px' }}>
                 IDEOLOGY
               </label>
               <select
                 value={ideology}
                 onChange={e => setIdeology(e.target.value)}
                 style={{
-                  background: '#0f1117',
-                  border: '1px solid #2d3148',
-                  color: '#e2e8f0',
+                  background: '#f8fafc',
+                  border: '1px solid #dbe4f0',
+                  color: '#0f1b2d',
                   padding: '6px 10px',
                   borderRadius: '6px',
                   fontSize: '12px'
@@ -161,16 +161,16 @@ export default function SearchPanel() {
             </div>
 
             <div>
-              <label style={{ color: '#8892b0', fontSize: '11px', display: 'block', marginBottom: '4px' }}>
+              <label style={{ color: '#5b6b82', fontSize: '11px', display: 'block', marginBottom: '4px' }}>
                 SORT BY
               </label>
               <select
                 value={sortBy}
                 onChange={e => setSortBy(e.target.value)}
                 style={{
-                  background: '#0f1117',
-                  border: '1px solid #2d3148',
-                  color: '#e2e8f0',
+                  background: '#f8fafc',
+                  border: '1px solid #dbe4f0',
+                  color: '#0f1b2d',
                   padding: '6px 10px',
                   borderRadius: '6px',
                   fontSize: '12px'
@@ -187,7 +187,7 @@ export default function SearchPanel() {
               style={{
                 padding: '6px 16px',
                 borderRadius: '6px',
-                background: '#4f46e5',
+                background: '#0b5fff',
                 color: '#fff',
                 border: 'none',
                 cursor: 'pointer',
@@ -203,15 +203,15 @@ export default function SearchPanel() {
       {/* ── Error State ──────────────────────────── */}
       {error && (
         <div style={{
-          background: '#1a1d27',
-          border: '1px solid #ef4444',
+          background: '#ffffff',
+          border: '1px solid #dc2626',
           borderRadius: '12px',
           padding: '40px',
           textAlign: 'center'
         }}>
           <div style={{ fontSize: '32px', marginBottom: '12px' }}>⚠️</div>
-          <div style={{ color: '#fca5a5', fontSize: '16px' }}>{error}</div>
-          <div style={{ color: '#8892b0', fontSize: '13px', marginTop: '8px' }}>
+          <div style={{ color: '#b42318', fontSize: '16px' }}>{error}</div>
+          <div style={{ color: '#5b6b82', fontSize: '13px', marginTop: '8px' }}>
             Try a longer or different search query
           </div>
         </div>
@@ -220,15 +220,15 @@ export default function SearchPanel() {
       {/* ── No Results ───────────────────────────── */}
       {!error && total === 0 && (
         <div style={{
-          background: '#1a1d27',
-          border: '1px solid #2d3148',
+          background: '#ffffff',
+          border: '1px solid #dbe4f0',
           borderRadius: '12px',
           padding: '40px',
           textAlign: 'center'
         }}>
           <div style={{ fontSize: '32px', marginBottom: '12px' }}>🔍</div>
-          <div style={{ color: '#e2e8f0', fontSize: '16px' }}>No results found</div>
-          <div style={{ color: '#8892b0', fontSize: '13px', marginTop: '8px' }}>
+          <div style={{ color: '#0f1b2d', fontSize: '16px' }}>No results found</div>
+          <div style={{ color: '#5b6b82', fontSize: '13px', marginTop: '8px' }}>
             Try rephrasing your query
           </div>
         </div>
@@ -240,23 +240,23 @@ export default function SearchPanel() {
           {/* AI Summary */}
           {summary && (
             <div style={{
-              background: '#1a1d27',
-              border: '1px solid #2d3148',
+              background: '#ffffff',
+              border: '1px solid #dbe4f0',
               borderRadius: '12px',
               padding: '16px',
-              borderLeft: '4px solid #4f46e5'
+              borderLeft: '4px solid #0b5fff'
             }}>
-              <div style={{ color: '#4f46e5', fontSize: '11px', fontWeight: '600', marginBottom: '6px' }}>
+              <div style={{ color: '#0b5fff', fontSize: '11px', fontWeight: '600', marginBottom: '6px' }}>
                 AI INVESTIGATION SUMMARY
               </div>
-              <p style={{ color: '#cbd5e1', fontSize: '14px', lineHeight: '1.7' }}>
+              <p style={{ color: '#24364d', fontSize: '14px', lineHeight: '1.7' }}>
                 {summary}
               </p>
 
               {/* Related queries */}
               {related_queries.length > 0 && (
                 <div style={{ marginTop: '12px' }}>
-                  <div style={{ color: '#8892b0', fontSize: '11px', marginBottom: '6px' }}>
+                  <div style={{ color: '#5b6b82', fontSize: '11px', marginBottom: '6px' }}>
                     EXPLORE NEXT:
                   </div>
                   <div className="flex flex-wrap gap-2">
@@ -272,13 +272,13 @@ export default function SearchPanel() {
           {/* Timeline */}
           {timeline.length > 0 && (
             <div style={{
-              background: '#1a1d27',
-              border: '1px solid #2d3148',
+              background: '#ffffff',
+              border: '1px solid #dbe4f0',
               borderRadius: '12px',
               padding: '20px'
             }}>
               <h3 style={{
-                color: '#e2e8f0',
+                color: '#0f1b2d',
                 fontSize: '15px',
                 fontWeight: '600',
                 marginBottom: '16px'
@@ -289,31 +289,31 @@ export default function SearchPanel() {
                 <AreaChart data={timeline}>
                   <defs>
                     <linearGradient id="searchColor" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%"  stopColor="#4f46e5" stopOpacity={0.3} />
-                      <stop offset="95%" stopColor="#4f46e5" stopOpacity={0}   />
+                      <stop offset="5%"  stopColor="#0b5fff" stopOpacity={0.3} />
+                      <stop offset="95%" stopColor="#0b5fff" stopOpacity={0}   />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#2d3148" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#dbe4f0" />
                   <XAxis
                     dataKey="date"
-                    stroke="#8892b0"
+                    stroke="#5b6b82"
                     tick={{ fontSize: 10 }}
                     tickFormatter={d => d.slice(5)}
                     interval={Math.floor(timeline.length / 6)}
                   />
-                  <YAxis stroke="#8892b0" tick={{ fontSize: 10 }} />
+                  <YAxis stroke="#5b6b82" tick={{ fontSize: 10 }} />
                   <Tooltip
                     contentStyle={{
-                      background: '#1a1d27',
-                      border: '1px solid #2d3148',
+                      background: '#ffffff',
+                      border: '1px solid #dbe4f0',
                       borderRadius: '8px',
-                      color: '#e2e8f0'
+                      color: '#0f1b2d'
                     }}
                   />
                   <Area
                     type="monotone"
                     dataKey="post_count"
-                    stroke="#4f46e5"
+                    stroke="#0b5fff"
                     fill="url(#searchColor)"
                     strokeWidth={2}
                     name="Posts"
@@ -326,14 +326,14 @@ export default function SearchPanel() {
                 <div style={{
                   marginTop:    '12px',
                   padding:      '12px 16px',
-                  background:   '#0f1117',
-                  borderLeft:   '3px solid #4f46e5',
+                  background:   '#f8fafc',
+                  borderLeft:   '3px solid #0b5fff',
                   borderRadius: '0 8px 8px 0',
                 }}>
-                  <span style={{ color: '#4f46e5', fontSize: '12px', fontWeight: '600' }}>
+                  <span style={{ color: '#0b5fff', fontSize: '12px', fontWeight: '600' }}>
                     AI SUMMARY
                   </span>
-                  <p style={{ color: '#8892b0', fontSize: '13px', marginTop: '4px', lineHeight: '1.6' }}>
+                  <p style={{ color: '#5b6b82', fontSize: '13px', marginTop: '4px', lineHeight: '1.6' }}>
                     {timeline_summary}
                   </p>
                 </div>
@@ -361,7 +361,7 @@ export default function SearchPanel() {
 
             <MiniCard title="🧭 Ideologies">
               {ideologies.length === 0 ? (
-                <p style={{ color: '#8892b0', fontSize: '12px' }}>
+                <p style={{ color: '#5b6b82', fontSize: '12px' }}>
                   No ideology flair data
                 </p>
               ) : (
@@ -379,7 +379,7 @@ export default function SearchPanel() {
 
             <MiniCard title="🔗 Sources">
               {domains.length === 0 ? (
-                <p style={{ color: '#8892b0', fontSize: '12px' }}>
+                <p style={{ color: '#5b6b82', fontSize: '12px' }}>
                   No external sources
                 </p>
               ) : (
@@ -398,13 +398,13 @@ export default function SearchPanel() {
 
           {/* Posts List */}
           <div style={{
-            background: '#1a1d27',
-            border: '1px solid #2d3148',
+            background: '#ffffff',
+            border: '1px solid #dbe4f0',
             borderRadius: '12px',
             padding: '20px'
           }}>
             <h3 style={{
-              color: '#e2e8f0',
+              color: '#0f1b2d',
               fontSize: '15px',
               fontWeight: '600',
               marginBottom: '16px'
@@ -444,9 +444,9 @@ function RelatedQuery({ query }) {
       style={{
         padding: '4px 12px',
         borderRadius: '20px',
-        background: '#0f1117',
-        color: '#4f46e5',
-        border: '1px solid #4f46e5',
+        background: '#f8fafc',
+        color: '#0b5fff',
+        border: '1px solid #0b5fff',
         fontSize: '12px',
         cursor: 'pointer'
       }}
@@ -460,13 +460,13 @@ function RelatedQuery({ query }) {
 function MiniCard({ title, children }) {
   return (
     <div style={{
-      background: '#1a1d27',
-      border: '1px solid #2d3148',
+      background: '#ffffff',
+      border: '1px solid #dbe4f0',
       borderRadius: '12px',
       padding: '16px'
     }}>
       <h4 style={{
-        color: '#e2e8f0',
+        color: '#0f1b2d',
         fontSize: '13px',
         fontWeight: '600',
         marginBottom: '12px'
@@ -487,7 +487,7 @@ function BreakdownRow({ label, value, max, color }) {
     <div>
       <div className="flex justify-between mb-1">
         <span style={{
-          color: '#cbd5e1',
+          color: '#24364d',
           fontSize: '11px',
           overflow: 'hidden',
           textOverflow: 'ellipsis',
@@ -496,9 +496,9 @@ function BreakdownRow({ label, value, max, color }) {
         }}>
           {label}
         </span>
-        <span style={{ color: '#8892b0', fontSize: '11px' }}>{value}</span>
+        <span style={{ color: '#5b6b82', fontSize: '11px' }}>{value}</span>
       </div>
-      <div style={{ background: '#0f1117', borderRadius: '3px', height: '4px' }}>
+      <div style={{ background: '#f8fafc', borderRadius: '3px', height: '4px' }}>
         <div style={{
           width: `${pct}%`,
           height: '100%',
@@ -519,13 +519,13 @@ function PostRow({ post }) {
       onClick={() => setExpanded(!expanded)}
       style={{
         padding: '12px',
-        background: '#0f1117',
+        background: '#f8fafc',
         borderRadius: '8px',
         cursor: 'pointer',
         border: '1px solid transparent',
         transition: 'border 0.2s'
       }}
-      onMouseEnter={e => e.currentTarget.style.borderColor = '#2d3148'}
+      onMouseEnter={e => e.currentTarget.style.borderColor = '#dbe4f0'}
       onMouseLeave={e => e.currentTarget.style.borderColor = 'transparent'}
     >
       <div className="flex gap-3 items-start">
@@ -533,32 +533,32 @@ function PostRow({ post }) {
           minWidth: '48px',
           textAlign: 'center',
           padding: '4px',
-          background: '#1a1d27',
+          background: '#ffffff',
           borderRadius: '6px'
         }}>
-          <div style={{ color: '#4f46e5', fontWeight: '700', fontSize: '14px' }}>
+          <div style={{ color: '#0b5fff', fontWeight: '700', fontSize: '14px' }}>
             ▲{post.score}
           </div>
         </div>
 
         <div style={{ flex: 1 }}>
           <div style={{
-            color: '#e2e8f0',
+            color: '#0f1b2d',
             fontSize: '13px',
             fontWeight: '500',
             lineHeight: '1.4'
           }}>
             {post.title}
           </div>
-          <div style={{ color: '#8892b0', fontSize: '11px', marginTop: '4px' }}>
+          <div style={{ color: '#5b6b82', fontSize: '11px', marginTop: '4px' }}>
             r/{post.subreddit} · u/{post.author}
             {post.author_flair_text && (
               <span style={{
                 marginLeft: '6px',
                 padding: '1px 6px',
-                background: '#1a1d27',
+                background: '#ffffff',
                 borderRadius: '10px',
-                color: '#4f46e5'
+                color: '#0b5fff'
               }}>
                 {post.author_flair_text}
               </span>
@@ -570,9 +570,9 @@ function PostRow({ post }) {
             <div style={{
               marginTop: '8px',
               padding: '8px',
-              background: '#1a1d27',
+              background: '#ffffff',
               borderRadius: '6px',
-              color: '#8892b0',
+              color: '#5b6b82',
               fontSize: '12px',
               lineHeight: '1.6'
             }}>

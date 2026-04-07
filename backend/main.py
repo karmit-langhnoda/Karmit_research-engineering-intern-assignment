@@ -20,6 +20,7 @@ from database.duckdb_client import (
 from database.chroma_client import semantic_search
 from ml.clustering import get_topic_clusters
 from ml.summarizer import summarize_timeline, summarize_search_results
+from ml.global_trends import get_global_topics, get_global_insights
 from agents.graph import run_agent
 
 # ─── App Setup ────────────────────────────────────────
@@ -69,6 +70,50 @@ def trending(
         "subreddits": subreddits,
         "summary":    summary
     }
+
+
+@app.get("/api/global-trending")
+def global_trending(
+    region: str = Query(default="GLOBAL"),
+    limit: int = Query(default=12, ge=3, le=30),
+    refresh: bool = Query(default=False),
+):
+    return get_global_topics(
+        region=region,
+        limit=limit,
+        force_refresh=refresh,
+    )
+
+
+@app.get("/api/global-insights")
+def global_insights(
+    subreddit: Optional[str] = None,
+    ideology: Optional[str] = None,
+    date_from: Optional[float] = None,
+    date_to: Optional[float] = None,
+    region: str = Query(default="GLOBAL"),
+    limit: int = Query(default=12, ge=3, le=30),
+):
+    timeline = get_timeline(
+        subreddit=subreddit,
+        ideology=ideology,
+        date_from=date_from,
+        date_to=date_to,
+    )
+    posts = get_posts(
+        subreddit=subreddit,
+        ideology=ideology,
+        date_from=date_from,
+        date_to=date_to,
+        limit=500,
+    )
+
+    return get_global_insights(
+        reddit_posts=posts,
+        reddit_timeline=timeline,
+        region=region,
+        limit=limit,
+    )
 
 # ─── 3. Search ────────────────────────────────────────
 @app.get("/api/search")

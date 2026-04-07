@@ -30,8 +30,8 @@ export default function NetworkTab() {
 
       {/* ── Controls ─────────────────────────────── */}
       <div style={{
-        background: '#1a1d27',
-        border: '1px solid #2d3148',
+        background: '#ffffff',
+        border: '1px solid #dbe4f0',
         borderRadius: '12px',
         padding: '16px'
       }}>
@@ -39,8 +39,8 @@ export default function NetworkTab() {
 
           {/* Min connections slider */}
           <div>
-            <label style={{ color: '#8892b0', fontSize: '12px' }}>
-              Min Connections: <span style={{ color: '#fff' }}>{minConn}</span>
+            <label style={{ color: '#5b6b82', fontSize: '12px' }}>
+              Min Connections: <span style={{ color: '#0f1b2d' }}>{minConn}</span>
             </label>
             <input
               type="range" min={1} max={20} value={minConn}
@@ -54,7 +54,7 @@ export default function NetworkTab() {
 
           {/* Color by */}
           <div>
-            <label style={{ color: '#8892b0', fontSize: '12px', display: 'block', marginBottom: '6px' }}>
+            <label style={{ color: '#5b6b82', fontSize: '12px', display: 'block', marginBottom: '6px' }}>
               Color by:
             </label>
             <div className="flex gap-2">
@@ -66,9 +66,9 @@ export default function NetworkTab() {
                     padding: '4px 12px',
                     borderRadius: '6px',
                     fontSize: '12px',
-                    background: colorBy === opt ? '#4f46e5' : '#0f1117',
-                    color: colorBy === opt ? '#fff' : '#8892b0',
-                    border: '1px solid #2d3148',
+                    background: colorBy === opt ? '#0b5fff' : '#f8fafc',
+                    color: colorBy === opt ? '#fff' : '#5b6b82',
+                    border: '1px solid #dbe4f0',
                     cursor: 'pointer'
                   }}
                 >
@@ -86,8 +86,8 @@ export default function NetworkTab() {
               { label: 'Components', value: data?.components   ?? '—' },
             ].map(({ label, value }) => (
               <div key={label} style={{ textAlign: 'center' }}>
-                <div style={{ color: '#fff', fontWeight: '700', fontSize: '20px' }}>{value}</div>
-                <div style={{ color: '#8892b0', fontSize: '11px' }}>{label}</div>
+                <div style={{ color: '#0f1b2d', fontWeight: '700', fontSize: '20px' }}>{value}</div>
+                <div style={{ color: '#5b6b82', fontSize: '11px' }}>{label}</div>
               </div>
             ))}
           </div>
@@ -100,7 +100,7 @@ export default function NetworkTab() {
                 padding: '6px 14px',
                 borderRadius: '6px',
                 fontSize: '12px',
-                background: '#ef4444',
+                background: '#dc2626',
                 color: '#fff',
                 border: 'none',
                 cursor: 'pointer'
@@ -118,30 +118,30 @@ export default function NetworkTab() {
         {/* Network Graph */}
         <div style={{
           flex: 1,
-          background: '#1a1d27',
-          border: '1px solid #2d3148',
+          background: '#ffffff',
+          border: '1px solid #dbe4f0',
           borderRadius: '12px',
           padding: '16px',
           minHeight: '500px'
         }}>
-          <h2 style={{ color: '#e2e8f0', fontSize: '16px', fontWeight: '600', marginBottom: '12px' }}>
+          <h2 style={{ color: '#0f1b2d', fontSize: '16px', fontWeight: '600', marginBottom: '12px' }}>
             🕸️ Subreddit Crosspost Network
           </h2>
-          <p style={{ color: '#8892b0', fontSize: '12px', marginBottom: '12px' }}>
+          <p style={{ color: '#5b6b82', fontSize: '12px', marginBottom: '12px' }}>
             Click a node to inspect · Right-click to remove
           </p>
 
           {loading ? (
-            <div style={{ textAlign: 'center', padding: '80px', color: '#8892b0' }}>
+            <div style={{ textAlign: 'center', padding: '80px', color: '#5b6b82' }}>
               ⏳ Building network...
             </div>
           ) : data?.nodes?.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '80px', color: '#8892b0' }}>
+            <div style={{ textAlign: 'center', padding: '80px', color: '#5b6b82' }}>
               ⚠️ No connections found at this threshold
             </div>
           ) : (
             <svg ref={svgRef} width="100%" height="480"
-              style={{ borderRadius: '8px', background: '#0f1117' }}
+              style={{ borderRadius: '8px', background: '#f8fafc' }}
             />
           )}
         </div>
@@ -149,12 +149,12 @@ export default function NetworkTab() {
         {/* Node Detail Panel */}
         <div style={{
           width: '260px',
-          background: '#1a1d27',
-          border: '1px solid #2d3148',
+          background: '#ffffff',
+          border: '1px solid #dbe4f0',
           borderRadius: '12px',
           padding: '16px'
         }}>
-          <h3 style={{ color: '#e2e8f0', fontSize: '14px', fontWeight: '600', marginBottom: '12px' }}>
+          <h3 style={{ color: '#0f1b2d', fontSize: '14px', fontWeight: '600', marginBottom: '12px' }}>
             Node Details
           </h3>
 
@@ -162,11 +162,11 @@ export default function NetworkTab() {
             <div className="flex flex-col gap-3">
               <div style={{
                 padding: '10px',
-                background: '#0f1117',
+                background: '#f8fafc',
                 borderRadius: '8px',
-                borderLeft: '3px solid #4f46e5'
+                borderLeft: '3px solid #0b5fff'
               }}>
-                <div style={{ color: '#fff', fontWeight: '700', fontSize: '16px' }}>
+                <div style={{ color: '#0f1b2d', fontWeight: '700', fontSize: '16px' }}>
                   r/{selectedNode.id}
                 </div>
               </div>
@@ -181,10 +181,10 @@ export default function NetworkTab() {
                   display: 'flex',
                   justifyContent: 'space-between',
                   padding: '8px 0',
-                  borderBottom: '1px solid #2d3148'
+                  borderBottom: '1px solid #dbe4f0'
                 }}>
-                  <span style={{ color: '#8892b0', fontSize: '12px' }}>{label}</span>
-                  <span style={{ color: '#e2e8f0', fontSize: '12px', fontWeight: '600' }}>{value}</span>
+                  <span style={{ color: '#5b6b82', fontSize: '12px' }}>{label}</span>
+                  <span style={{ color: '#0f1b2d', fontSize: '12px', fontWeight: '600' }}>{value}</span>
                 </div>
               ))}
 
@@ -194,9 +194,9 @@ export default function NetworkTab() {
                   marginTop: '8px',
                   padding: '8px',
                   borderRadius: '6px',
-                  background: '#7f1d1d',
-                  color: '#fca5a5',
-                  border: '1px solid #ef4444',
+                  background: '#991b1b',
+                  color: '#fff',
+                  border: '1px solid #dc2626',
                   fontSize: '12px',
                   cursor: 'pointer',
                   width: '100%'
@@ -206,17 +206,17 @@ export default function NetworkTab() {
               </button>
             </div>
           ) : (
-            <p style={{ color: '#8892b0', fontSize: '13px' }}>
+            <p style={{ color: '#5b6b82', fontSize: '13px' }}>
               Click any node in the network to see its details and influence scores.
             </p>
           )}
 
           {/* Legend */}
           <div style={{ marginTop: '24px' }}>
-            <div style={{ color: '#8892b0', fontSize: '11px', marginBottom: '8px' }}>
+            <div style={{ color: '#5b6b82', fontSize: '11px', marginBottom: '8px' }}>
               LEGEND
             </div>
-            <div style={{ color: '#8892b0', fontSize: '11px', lineHeight: '1.8' }}>
+            <div style={{ color: '#5b6b82', fontSize: '11px', lineHeight: '1.8' }}>
               • Node size = PageRank score<br/>
               • Edge thickness = crosspost count<br/>
               • Colors = {colorBy === 'community' ? 'Louvain community' : colorBy}
@@ -293,7 +293,7 @@ function drawNetwork(data, svgEl, colorBy, onNodeClick) {
   const link = g.append('g').selectAll('line')
     .data(edges)
     .join('line')
-    .attr('stroke', '#2d3148')
+    .attr('stroke', '#dbe4f0')
     .attr('stroke-opacity', 0.6)
     .attr('stroke-width', d => edgeScale(d.weight))
 
@@ -303,7 +303,7 @@ function drawNetwork(data, svgEl, colorBy, onNodeClick) {
     .join('circle')
     .attr('r',      d => sizeScale(d.pagerank))
     .attr('fill',   d => getColor(d))
-    .attr('stroke', '#0f1117')
+    .attr('stroke', '#f8fafc')
     .attr('stroke-width', 1.5)
     .style('cursor', 'pointer')
     .call(
@@ -327,7 +327,7 @@ function drawNetwork(data, svgEl, colorBy, onNodeClick) {
     .join('text')
     .text(d => d.id)
     .attr('font-size',   10)
-    .attr('fill',        '#cbd5e1')
+    .attr('fill',        '#24364d')
     .attr('text-anchor', 'middle')
     .attr('dy',          d => -sizeScale(d.pagerank) - 3)
     .style('pointer-events', 'none')

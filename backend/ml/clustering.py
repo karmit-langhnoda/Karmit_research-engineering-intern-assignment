@@ -29,9 +29,19 @@ def get_topic_clusters(
         )
 
     ids        = data["ids"]
-    embeddings = np.array(data["embeddings"])
-    documents  = data["documents"]
-    metadatas  = data["metadatas"]
+    documents = data.get("documents")
+    if documents is None:
+        documents = []
+
+    metadatas = data.get("metadatas")
+    if metadatas is None:
+        metadatas = []
+
+    raw_embeddings = data.get("embeddings")
+    if raw_embeddings is None:
+        raw_embeddings = []
+    elif isinstance(raw_embeddings, np.ndarray):
+        raw_embeddings = raw_embeddings.tolist()
 
     # ── Edge case: not enough posts ───────────────────────
     if len(ids) < 2:
@@ -41,30 +51,60 @@ def get_topic_clusters(
             "clusters": []
         }
 
+    # ── Ensure embeddings exist ───────────────────────────
+    if len(raw_embeddings) != len(ids):
+        try:
+            raw_embeddings = model.encode(
+                [d if d else "empty post" for d in documents],
+                show_progress_bar=False,
+                batch_size=64
+            ).tolist()
+        except Exception:
+            return {
+                "error": "Could not prepare embeddings for clustering",
+                "points": [],
+                "clusters": []
+            }
+
+    embeddings = np.array(raw_embeddings)
+
     # ── Clamp n_clusters ──────────────────────────────────
-    # handles extreme values from slider
-    n_clusters = max(2, min(n_clusters, min(50, len(ids) // 2)))
+    # keep upper bound safe for KMeans (must be <= n_samples)
+    n_clusters = max(2, min(n_clusters, min(50, len(ids))))
 
     # ── Normalize embeddings ──────────────────────────────
     embeddings_norm = normalize(embeddings)
 
     # ── UMAP: reduce to 2D for visualization ──────────────
-    reducer = umap.UMAP(
-        n_components = 2,
-        n_neighbors  = min(15, len(ids) - 1),
-        min_dist     = 0.1,
-        metric       = "cosine",
-        random_state = 42
-    )
-    embeddings_2d = reducer.fit_transform(embeddings_norm)
+    try:
+        reducer = umap.UMAP(
+            n_components = 2,
+            n_neighbors  = min(15, len(ids) - 1),
+            min_dist     = 0.1,
+            metric       = "cosine",
+            random_state = 42
+        )
+        embeddings_2d = reducer.fit_transform(embeddings_norm)
+    except Exception:
+        # fallback projection avoids request failure if UMAP fails
+        if embeddings_norm.shape[1] >= 2:
+            embeddings_2d = embeddings_norm[:, :2]
+        else:
+            embeddings_2d = np.column_stack([
+                embeddings_norm[:, 0],
+                np.zeros(len(ids))
+            ])
 
     # ── KMeans clustering ─────────────────────────────────
-    kmeans  = KMeans(
-        n_clusters = n_clusters,
-        random_state = 42,
-        n_init = 10
-    )
-    labels  = kmeans.fit_predict(embeddings_norm)
+    try:
+        kmeans  = KMeans(
+            n_clusters = n_clusters,
+            random_state = 42,
+            n_init = 10
+        )
+        labels  = kmeans.fit_predict(embeddings_norm)
+    except Exception:
+        labels = np.array([i % n_clusters for i in range(len(ids))])
 
     # ── Build cluster labels (top words per cluster) ──────
     cluster_texts = {}

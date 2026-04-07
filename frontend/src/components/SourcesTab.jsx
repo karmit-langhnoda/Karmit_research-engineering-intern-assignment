@@ -8,9 +8,9 @@ import { getSources } from '../api'
 import useStore from '../store/useStore'
 
 const COLORS = [
-  '#4f46e5','#06b6d4','#10b981','#f59e0b',
-  '#ef4444','#8b5cf6','#ec4899','#14b8a6',
-  '#f97316','#6366f1'
+  '#0b5fff','#0891b2','#0f766e','#d97706',
+  '#dc2626','#7c3aed','#db2777','#0f766e',
+  '#ea580c','#2563eb'
 ]
 
 // classify domain type
@@ -33,15 +33,15 @@ function classifyDomain(domain) {
 }
 
 const TYPE_COLORS = {
-  'mainstream news': '#10b981',
-  'reddit':          '#ef4444',
-  'video':           '#f59e0b',
-  'reference':       '#06b6d4',
-  'social media':    '#8b5cf6',
-  'government':      '#4f46e5',
-  'academic':        '#14b8a6',
-  'blog':            '#ec4899',
-  'alternative':     '#f97316',
+  'mainstream news': '#0f766e',
+  'reddit':          '#dc2626',
+  'video':           '#d97706',
+  'reference':       '#0891b2',
+  'social media':    '#7c3aed',
+  'government':      '#0b5fff',
+  'academic':        '#0f766e',
+  'blog':            '#db2777',
+  'alternative':     '#ea580c',
   'other':           '#6b7280',
 }
 
@@ -60,7 +60,7 @@ export default function SourcesTab() {
   }, [filters])
 
   if (loading) return (
-    <div style={{ textAlign: 'center', padding: '60px', color: '#8892b0' }}>
+    <div style={{ textAlign: 'center', padding: '60px', color: '#5b6b82' }}>
       ⏳ Loading source data...
     </div>
   )
@@ -95,19 +95,19 @@ export default function SourcesTab() {
 
       {/* ── Type Filter Pills ────────────────────── */}
       <div style={{
-        background: '#1a1d27',
-        border: '1px solid #2d3148',
+        background: '#ffffff',
+        border: '1px solid #dbe4f0',
         borderRadius: '12px',
         padding: '16px'
       }}>
-        <div style={{ color: '#8892b0', fontSize: '12px', marginBottom: '10px' }}>
+        <div style={{ color: '#5b6b82', fontSize: '12px', marginBottom: '10px' }}>
           FILTER BY SOURCE TYPE
         </div>
         <div className="flex flex-wrap gap-2">
           <Pill
             label="All"
             count={domains.length}
-            color="#4f46e5"
+            color="#0b5fff"
             active={filterType === 'all'}
             onClick={() => setFilterType('all')}
           />
@@ -130,7 +130,7 @@ export default function SourcesTab() {
       {/* ── Top Domains Bar Chart ────────────────── */}
       <Card title="🔗 Most Shared Domains">
         {filtered.length === 0 ? (
-          <div style={{ color: '#8892b0', textAlign: 'center', padding: '40px' }}>
+          <div style={{ color: '#5b6b82', textAlign: 'center', padding: '40px' }}>
             No domains found for this filter
           </div>
         ) : (
@@ -140,25 +140,25 @@ export default function SourcesTab() {
               layout="vertical"
               margin={{ left: 20 }}
             >
-              <CartesianGrid strokeDasharray="3 3" stroke="#2d3148" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#dbe4f0" />
               <XAxis
                 type="number"
-                stroke="#8892b0"
+                stroke="#5b6b82"
                 tick={{ fontSize: 11 }}
               />
               <YAxis
                 type="category"
                 dataKey="domain"
-                stroke="#8892b0"
+                stroke="#5b6b82"
                 tick={{ fontSize: 10 }}
                 width={160}
               />
               <Tooltip
                 contentStyle={{
-                  background: '#1a1d27',
-                  border: '1px solid #2d3148',
+                  background: '#ffffff',
+                  border: '1px solid #dbe4f0',
                   borderRadius: '8px',
-                  color: '#e2e8f0'
+                  color: '#0f1b2d'
                 }}
                 formatter={(val, name) => [val, 'Times Shared']}
               />
@@ -179,7 +179,7 @@ export default function SourcesTab() {
             </BarChart>
           </ResponsiveContainer>
         )}
-        <p style={{ color: '#8892b0', fontSize: '12px', marginTop: '8px' }}>
+        <p style={{ color: '#5b6b82', fontSize: '12px', marginTop: '8px' }}>
           Click any bar to inspect that domain
         </p>
       </Card>
@@ -187,34 +187,34 @@ export default function SourcesTab() {
       {/* ── Selected Domain Detail ───────────────── */}
       {selected && (
         <div style={{
-          background: '#1a1d27',
-          border: `1px solid ${TYPE_COLORS[selected.type] || '#2d3148'}`,
+          background: '#ffffff',
+          border: `1px solid ${TYPE_COLORS[selected.type] || '#dbe4f0'}`,
           borderRadius: '12px',
           padding: '20px'
         }}>
           <div className="flex justify-between items-center mb-3">
-            <h3 style={{ color: '#e2e8f0', fontSize: '16px', fontWeight: '600' }}>
+            <h3 style={{ color: '#0f1b2d', fontSize: '16px', fontWeight: '600' }}>
               🔗 {selected.domain}
             </h3>
             <button
               onClick={() => setSelected(null)}
-              style={{ background: 'none', border: 'none', color: '#8892b0', cursor: 'pointer', fontSize: '18px' }}
+              style={{ background: 'none', border: 'none', color: '#5b6b82', cursor: 'pointer', fontSize: '18px' }}
             >✕</button>
           </div>
           <div className="flex gap-6 flex-wrap">
             {[
               { label: 'Source Type',   value: selected.type,                   color: TYPE_COLORS[selected.type] },
-              { label: 'Times Shared',  value: selected.share_count,            color: '#e2e8f0' },
-              { label: 'Avg Post Score',value: Math.round(selected.avg_score),  color: '#e2e8f0' },
+              { label: 'Times Shared',  value: selected.share_count,            color: '#0f1b2d' },
+              { label: 'Avg Post Score',value: Math.round(selected.avg_score),  color: '#0f1b2d' },
             ].map(({ label, value, color }) => (
               <div key={label} style={{
-                background: '#0f1117',
+                background: '#f8fafc',
                 borderRadius: '8px',
                 padding: '12px 20px',
                 textAlign: 'center'
               }}>
                 <div style={{ color, fontWeight: '700', fontSize: '20px' }}>{value}</div>
-                <div style={{ color: '#8892b0', fontSize: '11px' }}>{label}</div>
+                <div style={{ color: '#5b6b82', fontSize: '11px' }}>{label}</div>
               </div>
             ))}
           </div>
@@ -223,34 +223,34 @@ export default function SourcesTab() {
 
       {/* ── Scatter: Share Count vs Avg Score ────── */}
       <Card title="📊 Source Influence Map (Reach vs Engagement)">
-        <p style={{ color: '#8892b0', fontSize: '12px', marginBottom: '12px' }}>
+        <p style={{ color: '#5b6b82', fontSize: '12px', marginBottom: '12px' }}>
           X = how often shared · Y = average post score · Colored by source type
         </p>
         <ResponsiveContainer width="100%" height={320}>
           <ScatterChart margin={{ top: 10, right: 20, bottom: 10, left: 10 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#2d3148" />
+            <CartesianGrid strokeDasharray="3 3" stroke="#dbe4f0" />
             <XAxis
               dataKey="x"
               name="Times Shared"
-              stroke="#8892b0"
+              stroke="#5b6b82"
               tick={{ fontSize: 11 }}
-              label={{ value: 'Times Shared', position: 'insideBottom', offset: -5, fill: '#8892b0', fontSize: 11 }}
+              label={{ value: 'Times Shared', position: 'insideBottom', offset: -5, fill: '#5b6b82', fontSize: 11 }}
             />
             <YAxis
               dataKey="y"
               name="Avg Score"
-              stroke="#8892b0"
+              stroke="#5b6b82"
               tick={{ fontSize: 11 }}
-              label={{ value: 'Avg Score', angle: -90, position: 'insideLeft', fill: '#8892b0', fontSize: 11 }}
+              label={{ value: 'Avg Score', angle: -90, position: 'insideLeft', fill: '#5b6b82', fontSize: 11 }}
             />
             <ZAxis dataKey="z" range={[40, 400]} />
             <Tooltip
               cursor={{ strokeDasharray: '3 3' }}
               contentStyle={{
-                background: '#1a1d27',
-                border: '1px solid #2d3148',
+                background: '#ffffff',
+                border: '1px solid #dbe4f0',
                 borderRadius: '8px',
-                color: '#e2e8f0'
+                color: '#0f1b2d'
               }}
               formatter={(val, name) => [val, name]}
               content={({ active, payload }) => {
@@ -258,15 +258,15 @@ export default function SourcesTab() {
                 const d = payload[0]?.payload
                 return (
                   <div style={{
-                    background: '#1a1d27',
-                    border: '1px solid #2d3148',
+                    background: '#ffffff',
+                    border: '1px solid #dbe4f0',
                     borderRadius: '8px',
                     padding: '10px'
                   }}>
-                    <div style={{ color: '#fff', fontWeight: '600', fontSize: '13px' }}>{d?.name}</div>
-                    <div style={{ color: '#8892b0', fontSize: '12px' }}>Type: {d?.type}</div>
-                    <div style={{ color: '#8892b0', fontSize: '12px' }}>Shared: {d?.x} times</div>
-                    <div style={{ color: '#8892b0', fontSize: '12px' }}>Avg Score: {d?.y}</div>
+                    <div style={{ color: '#0f1b2d', fontWeight: '600', fontSize: '13px' }}>{d?.name}</div>
+                    <div style={{ color: '#5b6b82', fontSize: '12px' }}>Type: {d?.type}</div>
+                    <div style={{ color: '#5b6b82', fontSize: '12px' }}>Shared: {d?.x} times</div>
+                    <div style={{ color: '#5b6b82', fontSize: '12px' }}>Avg Score: {d?.y}</div>
                   </div>
                 )
               }}
@@ -288,7 +288,7 @@ export default function SourcesTab() {
                 borderRadius: '50%',
                 background: color
               }} />
-              <span style={{ color: '#8892b0', fontSize: '11px' }}>{type}</span>
+              <span style={{ color: '#5b6b82', fontSize: '11px' }}>{type}</span>
             </div>
           ))}
         </div>
@@ -308,7 +308,7 @@ export default function SourcesTab() {
                 key={type}
                 onClick={() => setFilterType(type)}
                 style={{
-                  background: '#0f1117',
+                  background: '#f8fafc',
                   borderRadius: '8px',
                   padding: '14px',
                   borderLeft: `3px solid ${TYPE_COLORS[type]}`,
@@ -323,7 +323,7 @@ export default function SourcesTab() {
                 }}>
                   {count}
                 </div>
-                <div style={{ color: '#8892b0', fontSize: '12px', marginTop: '2px' }}>
+                <div style={{ color: '#5b6b82', fontSize: '12px', marginTop: '2px' }}>
                   {type}
                 </div>
               </div>
@@ -345,9 +345,9 @@ function Pill({ label, count, color, active, onClick }) {
         padding: '4px 12px',
         borderRadius: '20px',
         fontSize: '12px',
-        background: active ? color : '#0f1117',
-        color: active ? '#fff' : '#8892b0',
-        border: `1px solid ${active ? color : '#2d3148'}`,
+        background: active ? color : '#f8fafc',
+        color: active ? '#fff' : '#5b6b82',
+        border: `1px solid ${active ? color : '#dbe4f0'}`,
         cursor: 'pointer',
         transition: 'all 0.2s'
       }}
@@ -361,13 +361,13 @@ function Pill({ label, count, color, active, onClick }) {
 function Card({ title, children }) {
   return (
     <div style={{
-      background: '#1a1d27',
-      border: '1px solid #2d3148',
+      background: '#ffffff',
+      border: '1px solid #dbe4f0',
       borderRadius: '12px',
       padding: '20px'
     }}>
       <h2 style={{
-        color: '#e2e8f0',
+        color: '#0f1b2d',
         fontSize: '16px',
         fontWeight: '600',
         marginBottom: '16px'

@@ -18,11 +18,11 @@ export default function App() {
   }, [])
 
   return (
-    <div className="min-h-screen" style={{ background: '#0f1117' }}>
+    <div className="min-h-screen" style={{ background: 'transparent' }}>
       <Header />
       <TabBar />
 
-      <main className="max-w-7xl mx-auto px-4 py-6">
+      <main className="max-w-7xl mx-auto px-4 py-6" style={{ paddingTop: '24px', paddingBottom: '36px' }}>
         {/* Search results override tab content */}
         {searchResults ? (
           <SearchPanel />
@@ -32,11 +32,10 @@ export default function App() {
             {activeTab === 'network'   && <NetworkTab />}
             {activeTab === 'ideology'  && <IdeologyTab />}
             {activeTab === 'sources'   && <SourcesTab />}
+            {activeTab === 'chat'      && <Chatbot />}
           </>
         )}
       </main>
-
-      <Chatbot />
     </div>
   )
 }

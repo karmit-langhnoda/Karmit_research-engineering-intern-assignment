@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
+
 * {
   margin: 0;
   padding: 0;
@@ -5,20 +7,24 @@
 }
 
 body {
-  background-color: #0f1117;
-  color: #e2e8f0;
-  font-family: 'Inter', system-ui, sans-serif;
+  background:
+    radial-gradient(circle at 12% 0%, #dbeafe 0%, transparent 30%),
+    radial-gradient(circle at 100% 100%, #e0f2fe 0%, transparent 35%),
+    #f3f7fc;
+  color: #0f1b2d;
+  font-family: 'Manrope', 'Segoe UI', sans-serif;
+  min-height: 100vh;
 }
 
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 9px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #1a1d27;
+  background: #edf3fb;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #3d4260;
-  border-radius: 3px;
+  background: #b8c7dd;
+  border-radius: 10px;
 }

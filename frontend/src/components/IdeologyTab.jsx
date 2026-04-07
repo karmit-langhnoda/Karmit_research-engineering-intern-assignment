@@ -7,9 +7,9 @@ import {
 import { getIdeology, getSearch } from '../api'
 
 const COLORS = [
-  '#4f46e5','#06b6d4','#10b981','#f59e0b',
-  '#ef4444','#8b5cf6','#ec4899','#14b8a6',
-  '#f97316','#6366f1'
+  '#0b5fff','#0891b2','#0f766e','#d97706',
+  '#dc2626','#7c3aed','#db2777','#0f766e',
+  '#ea580c','#2563eb'
 ]
 
 export default function IdeologyTab() {
@@ -43,7 +43,7 @@ export default function IdeologyTab() {
   }
 
   if (loading) return (
-    <div style={{ textAlign: 'center', padding: '60px', color: '#8892b0' }}>
+    <div style={{ textAlign: 'center', padding: '60px', color: '#5b6b82' }}>
       ⏳ Loading ideology data...
     </div>
   )
@@ -57,31 +57,31 @@ export default function IdeologyTab() {
       {/* ── Overview Bar Chart ───────────────────── */}
       <Card title="🧭 Post Volume by Ideology">
         {ideologies.length === 0 ? (
-          <div style={{ color: '#8892b0', textAlign: 'center', padding: '40px' }}>
+          <div style={{ color: '#5b6b82', textAlign: 'center', padding: '40px' }}>
             No ideology flair data found in current selection
           </div>
         ) : (
           <ResponsiveContainer width="100%" height={320}>
             <BarChart data={ideologies} layout="vertical" margin={{ left: 20 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#2d3148" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#dbe4f0" />
               <XAxis
                 type="number"
-                stroke="#8892b0"
+                stroke="#5b6b82"
                 tick={{ fontSize: 11 }}
               />
               <YAxis
                 type="category"
                 dataKey="ideology"
-                stroke="#8892b0"
+                stroke="#5b6b82"
                 tick={{ fontSize: 11 }}
                 width={140}
               />
               <Tooltip
                 contentStyle={{
-                  background: '#1a1d27',
-                  border: '1px solid #2d3148',
+                  background: '#ffffff',
+                  border: '1px solid #dbe4f0',
                   borderRadius: '8px',
-                  color: '#e2e8f0'
+                  color: '#0f1b2d'
                 }}
               />
               <Bar
@@ -102,7 +102,7 @@ export default function IdeologyTab() {
             </BarChart>
           </ResponsiveContainer>
         )}
-        <p style={{ color: '#8892b0', fontSize: '12px', marginTop: '8px' }}>
+        <p style={{ color: '#5b6b82', fontSize: '12px', marginTop: '8px' }}>
           Click any bar to explore posts from that ideology group
         </p>
       </Card>
@@ -115,31 +115,31 @@ export default function IdeologyTab() {
       {/* ── Avg Score Comparison ─────────────────── */}
       <Card title="⭐ Average Engagement by Ideology">
         {ideologies.length === 0 ? (
-          <div style={{ color: '#8892b0', textAlign: 'center', padding: '40px' }}>
+          <div style={{ color: '#5b6b82', textAlign: 'center', padding: '40px' }}>
             No data available
           </div>
         ) : (
           <ResponsiveContainer width="100%" height={280}>
             <BarChart data={ideologies} layout="vertical" margin={{ left: 20 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#2d3148" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#dbe4f0" />
               <XAxis
                 type="number"
-                stroke="#8892b0"
+                stroke="#5b6b82"
                 tick={{ fontSize: 11 }}
               />
               <YAxis
                 type="category"
                 dataKey="ideology"
-                stroke="#8892b0"
+                stroke="#5b6b82"
                 tick={{ fontSize: 11 }}
                 width={140}
               />
               <Tooltip
                 contentStyle={{
-                  background: '#1a1d27',
-                  border: '1px solid #2d3148',
+                  background: '#ffffff',
+                  border: '1px solid #dbe4f0',
                   borderRadius: '8px',
-                  color: '#e2e8f0'
+                  color: '#0f1b2d'
                 }}
               />
               <Bar
@@ -160,16 +160,16 @@ export default function IdeologyTab() {
       <Card title="⚔️ Compare Two Ideologies">
         <div className="flex gap-3 items-end flex-wrap mb-4">
           <div>
-            <label style={{ color: '#8892b0', fontSize: '12px', display: 'block', marginBottom: '4px' }}>
+            <label style={{ color: '#5b6b82', fontSize: '12px', display: 'block', marginBottom: '4px' }}>
               Ideology A
             </label>
             <select
               value={compareA}
               onChange={e => setCompareA(e.target.value)}
               style={{
-                background: '#0f1117',
-                border: '1px solid #2d3148',
-                color: '#e2e8f0',
+                background: '#f8fafc',
+                border: '1px solid #dbe4f0',
+                color: '#0f1b2d',
                 padding: '8px 12px',
                 borderRadius: '6px',
                 fontSize: '13px',
@@ -183,19 +183,19 @@ export default function IdeologyTab() {
             </select>
           </div>
 
-          <div style={{ color: '#8892b0', fontSize: '18px', paddingBottom: '8px' }}>vs</div>
+          <div style={{ color: '#5b6b82', fontSize: '18px', paddingBottom: '8px' }}>vs</div>
 
           <div>
-            <label style={{ color: '#8892b0', fontSize: '12px', display: 'block', marginBottom: '4px' }}>
+            <label style={{ color: '#5b6b82', fontSize: '12px', display: 'block', marginBottom: '4px' }}>
               Ideology B
             </label>
             <select
               value={compareB}
               onChange={e => setCompareB(e.target.value)}
               style={{
-                background: '#0f1117',
-                border: '1px solid #2d3148',
-                color: '#e2e8f0',
+                background: '#f8fafc',
+                border: '1px solid #dbe4f0',
+                color: '#0f1b2d',
                 padding: '8px 12px',
                 borderRadius: '6px',
                 fontSize: '13px',
@@ -215,8 +215,8 @@ export default function IdeologyTab() {
             style={{
               padding: '8px 20px',
               borderRadius: '6px',
-              background: compareA && compareB ? '#4f46e5' : '#2d3148',
-              color: '#fff',
+              background: compareA && compareB ? '#0b5fff' : '#dbe4f0',
+              color: '#0f1b2d',
               border: 'none',
               cursor: compareA && compareB ? 'pointer' : 'not-allowed',
               fontSize: '13px'
@@ -252,13 +252,13 @@ function IdeologyDetail({ ideology, onClose }) {
 
   return (
     <div style={{
-      background: '#1a1d27',
-      border: '1px solid #4f46e5',
+      background: '#ffffff',
+      border: '1px solid #0b5fff',
       borderRadius: '12px',
       padding: '20px'
     }}>
       <div className="flex justify-between items-center mb-4">
-        <h3 style={{ color: '#e2e8f0', fontSize: '16px', fontWeight: '600' }}>
+        <h3 style={{ color: '#0f1b2d', fontSize: '16px', fontWeight: '600' }}>
           📌 {ideology}
         </h3>
         <button
@@ -266,7 +266,7 @@ function IdeologyDetail({ ideology, onClose }) {
           style={{
             background: 'none',
             border: 'none',
-            color: '#8892b0',
+            color: '#5b6b82',
             cursor: 'pointer',
             fontSize: '18px'
           }}
@@ -274,17 +274,17 @@ function IdeologyDetail({ ideology, onClose }) {
       </div>
 
       {!detail ? (
-        <div style={{ color: '#8892b0' }}>Loading...</div>
+        <div style={{ color: '#5b6b82' }}>Loading...</div>
       ) : (
         <div className="flex flex-col gap-3">
           {/* Summary */}
           {detail.summary && (
             <div style={{
               padding: '12px',
-              background: '#0f1117',
-              borderLeft: '3px solid #4f46e5',
+              background: '#f8fafc',
+              borderLeft: '3px solid #0b5fff',
               borderRadius: '0 8px 8px 0',
-              color: '#8892b0',
+              color: '#5b6b82',
               fontSize: '13px',
               lineHeight: '1.6'
             }}>
@@ -295,18 +295,18 @@ function IdeologyDetail({ ideology, onClose }) {
           {/* Top subreddits */}
           {detail.subreddits?.length > 0 && (
             <div>
-              <div style={{ color: '#8892b0', fontSize: '11px', marginBottom: '6px' }}>
+              <div style={{ color: '#5b6b82', fontSize: '11px', marginBottom: '6px' }}>
                 TOP SUBREDDITS
               </div>
               <div className="flex flex-wrap gap-2">
                 {detail.subreddits.slice(0, 5).map(s => (
                   <span key={s.subreddit} style={{
                     padding: '3px 10px',
-                    background: '#0f1117',
-                    border: '1px solid #2d3148',
+                    background: '#f8fafc',
+                    border: '1px solid #dbe4f0',
                     borderRadius: '20px',
                     fontSize: '12px',
-                    color: '#e2e8f0'
+                    color: '#0f1b2d'
                   }}>
                     r/{s.subreddit} ({s.post_count})
                   </span>
@@ -318,19 +318,19 @@ function IdeologyDetail({ ideology, onClose }) {
           {/* Top posts */}
           {detail.posts?.length > 0 && (
             <div>
-              <div style={{ color: '#8892b0', fontSize: '11px', marginBottom: '6px' }}>
+              <div style={{ color: '#5b6b82', fontSize: '11px', marginBottom: '6px' }}>
                 TOP POSTS
               </div>
               <div className="flex flex-col gap-2">
                 {detail.posts.slice(0, 3).map(p => (
                   <div key={p.id} style={{
                     padding: '8px 12px',
-                    background: '#0f1117',
+                    background: '#f8fafc',
                     borderRadius: '6px',
                     fontSize: '12px',
-                    color: '#cbd5e1'
+                    color: '#24364d'
                   }}>
-                    <span style={{ color: '#4f46e5', marginRight: '8px' }}>
+                    <span style={{ color: '#0b5fff', marginRight: '8px' }}>
                       ▲ {p.score}
                     </span>
                     {p.title}
@@ -376,23 +376,23 @@ function CompareView({ labelA, labelB, dataA, dataB }) {
       }}>
         {metrics.map(({ label, a, b }) => (
           <div key={label} style={{
-            background: '#0f1117',
+            background: '#f8fafc',
             borderRadius: '8px',
             padding: '12px',
             textAlign: 'center'
           }}>
-            <div style={{ color: '#8892b0', fontSize: '11px', marginBottom: '8px' }}>
+            <div style={{ color: '#5b6b82', fontSize: '11px', marginBottom: '8px' }}>
               {label}
             </div>
             <div className="flex justify-around">
               <div>
-                <div style={{ color: '#4f46e5', fontSize: '13px', fontWeight: '600' }}>{a}</div>
-                <div style={{ color: '#8892b0', fontSize: '10px' }}>{labelA}</div>
+                <div style={{ color: '#0b5fff', fontSize: '13px', fontWeight: '600' }}>{a}</div>
+                <div style={{ color: '#5b6b82', fontSize: '10px' }}>{labelA}</div>
               </div>
-              <div style={{ color: '#2d3148' }}>|</div>
+              <div style={{ color: '#dbe4f0' }}>|</div>
               <div>
-                <div style={{ color: '#10b981', fontSize: '13px', fontWeight: '600' }}>{b}</div>
-                <div style={{ color: '#8892b0', fontSize: '10px' }}>{labelB}</div>
+                <div style={{ color: '#0f766e', fontSize: '13px', fontWeight: '600' }}>{b}</div>
+                <div style={{ color: '#5b6b82', fontSize: '10px' }}>{labelB}</div>
               </div>
             </div>
           </div>
@@ -402,11 +402,11 @@ function CompareView({ labelA, labelB, dataA, dataB }) {
       {/* Side by side summaries */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
         {[
-          { label: labelA, data: dataA, color: '#4f46e5' },
-          { label: labelB, data: dataB, color: '#10b981' },
+          { label: labelA, data: dataA, color: '#0b5fff' },
+          { label: labelB, data: dataB, color: '#0f766e' },
         ].map(({ label, data, color }) => (
           <div key={label} style={{
-            background: '#0f1117',
+            background: '#f8fafc',
             borderRadius: '8px',
             padding: '14px',
             borderLeft: `3px solid ${color}`
@@ -414,7 +414,7 @@ function CompareView({ labelA, labelB, dataA, dataB }) {
             <div style={{ color, fontSize: '13px', fontWeight: '600', marginBottom: '8px' }}>
               {label}
             </div>
-            <p style={{ color: '#8892b0', fontSize: '12px', lineHeight: '1.6' }}>
+            <p style={{ color: '#5b6b82', fontSize: '12px', lineHeight: '1.6' }}>
               {data.summary || 'No summary available'}
             </p>
           </div>
@@ -429,13 +429,13 @@ function CompareView({ labelA, labelB, dataA, dataB }) {
 function Card({ title, children }) {
   return (
     <div style={{
-      background: '#1a1d27',
-      border: '1px solid #2d3148',
+      background: '#ffffff',
+      border: '1px solid #dbe4f0',
       borderRadius: '12px',
       padding: '20px'
     }}>
       <h2 style={{
-        color: '#e2e8f0',
+        color: '#0f1b2d',
         fontSize: '16px',
         fontWeight: '600',
         marginBottom: '16px'

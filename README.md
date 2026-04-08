@@ -1,173 +1,450 @@
-# Reddit Narrative Dashboard
+# Reddit Narrative Intelligence Dashboard
 
-## 1. Video Demo
-Add your demo video link here.
+An AI-powered system to analyze, interpret, and visualize evolving narratives across Reddit using semantic search, clustering, network analysis, and global trend comparison.
 
-## 2. Project Link
-Add your deployed project link here.
+---
 
-## 3. Problem Statement
-Online discussions around politics and social issues are highly fragmented across communities, ideologies, and sources. It is difficult for users to quickly understand:
+## Video Demo
+Video-Demo: https://drive.google.com/drive/folders/1QOYCdph1ERCP4vCwbtC6WLWElnkt98_I?usp=sharing
 
-1. Which topics are trending over time.
-2. How different communities are connected.
-3. What ideological patterns are visible.
-4. Which external sources are being shared most.
-5. How to explore large Reddit datasets using natural language.
+---
 
-This project solves that by combining data analytics, semantic retrieval, clustering, and conversational interaction into one explainable dashboard.
+## Live Project Links
 
-## 4. My Approach
-The project follows an end-to-end pipeline:
+Project-Link: https://karmit-research-engineering-intern-assignment-h1t2i5i58.vercel.app
 
-1. Collect and preprocess Reddit dataset.
-2. Store structured records in DuckDB for fast analytical queries.
-3. Create and persist vector embeddings in ChromaDB for semantic retrieval.
-4. Build FastAPI endpoints for stats, trends, search, network, clusters, ideology, and sources.
-5. Use a LangGraph-based agent pipeline to process search/chat queries through:
-   1. Query understanding
-   2. Semantic retrieval
-   3. Data aggregation
-   4. AI synthesis
-6. Visualize insights in a React frontend with dedicated tabs.
-7. Deploy frontend on Vercel and backend on AWS EC2 using Docker and CI/CD.
+---
 
-## 5. Tech Stack
+## Problem We Solve
+
+Online narratives are fragmented across communities, ideologies, and sources. This project helps answer:
+
+- What topics are trending and how they change over time
+- Which communities influence one another
+- Which ideologies dominate narrative clusters
+- Which external sources are most shared
+- How Reddit narratives compare to global trend signals
+
+---
+
+## Solution Approach
+
+- Ingest and preprocess Reddit data
+- Store analytics-ready records in DuckDB
+- Generate vector embeddings and index in ChromaDB
+- Run semantic retrieval and agentic synthesis
+- Expose analytics and AI endpoints using FastAPI
+- Visualize insights in a React dashboard
+- Deploy frontend on Vercel and backend on AWS EC2 with Docker
+
+---
+
+## System Architecture
+
+### High-Level Architecture
+![High Level Architecture](assets/architecture/high_level.png)
+
+### End-to-End Flow
+![System Flow](assets/architecture/flow.png)
+
+### Search Flow
+![Search Flow](assets/architecture/search_flow.png)
+
+### Chat Flow (/api/chat)
+![Chat Flow](assets/architecture/chat_flow.png)
+
+---
+
+## Core Components
 
 ### Frontend
-1. React
-2. Vite
-3. Zustand
-4. D3.js
-5. Recharts
-6. Axios
-7. Tailwind CSS
+- React (Vite + React 19)
+- Zustand
+- D3.js
+- Recharts
+- Axios
+- Tailwind CSS
 
 ### Backend
-1. FastAPI
-2. Uvicorn
-3. LangGraph
-4. LangChain
-5. Groq API integration
-6. DuckDB
-7. ChromaDB
-8. Sentence Transformers
-9. Scikit-learn
-10. UMAP
+- FastAPI + Uvicorn
+- LangGraph + LangChain
+- Groq LLM integration
 
-### DevOps and Deployment
-1. Docker
-2. GitHub Actions
-3. AWS EC2
-4. Docker Hub
-5. Vercel
+### AI and Retrieval Layer
+- Query understanding node
+- Semantic retrieval (ChromaDB vectors)
+- Data aggregation (DuckDB)
+- AI synthesis and related queries
 
-## 6. Project Structure
+### Data and Analytics Layer
+- ChromaDB (vector store)
+- DuckDB (analytical store)
+- NetworkX + Louvain (network intelligence)
+- KMeans + UMAP (topic clustering)
+- Pandas/DuckDB aggregations
+- PyTrends (global trend signal)
 
-    Assignment_23BCE157/
-      README.md
-      Prompts.md
-      backend/
-        main.py
-        requirements.txt
-        Dockerfile
-        docker-compose.ec2.yml
-        agents/
-          graph.py
-          nodes.py
-        database/
-          duckdb_client.py
-          chroma_client.py
-        ml/
-          embeddings.py
-          clustering.py
-          summarizer.py
-          global_trends.py
-        preprocessing/
-          ingest.py
-      frontend/
-        package.json
-        src/
-          App.jsx
-          api/
-            index.js
-          components/
-            Header.jsx
-            TabBar.jsx
-            TrendingTab.jsx
-            TopicCluster.jsx
-            NetworkTab.jsx
-            IdeologyTab.jsx
-            SourcesTab.jsx
-            Chatbot.jsx
-          store/
-            useStore.js
-      data/
-        reddit.duckdb
-        chroma_db/
-        embeddings.npy
-        metadata.json
+---
 
-## 7. Workflow Overview
+## End-to-End User Flow
 
-### Data Layer
-1. Raw Reddit data is ingested using preprocessing scripts.
-2. Structured records are stored in DuckDB.
-3. Text embeddings are generated and stored in ChromaDB.
+1. User opens dashboard and selects a feature tab.
+2. Frontend calls backend API with filters/query.
+3. Backend runs retrieval, aggregation, and AI nodes.
+4. Response is returned as structured JSON.
+5. Frontend renders charts, cards, graphs, and chat output.
 
-### Intelligence Layer
-1. Semantic search retrieves relevant posts by meaning, not only keywords.
-2. LangGraph agent pipeline produces summaries, related queries, and contextual insights.
-3. Topic clustering groups semantically similar posts for map visualization.
+---
 
-### API Layer
-FastAPI serves endpoints for:
+## AI Pipelines
 
-1. Health check
-2. Summary statistics
-3. Trending timeline and subreddit breakdown
-4. Search and chat intelligence
-5. Network graph generation
-6. Topic clusters
-7. Ideology and source intelligence
-8. Post-level drilldown
+### Semantic Retrieval
+- Sentence-Transformer embeddings
+- Vector similarity search in ChromaDB
+- Filter-aware retrieval by subreddit and ideology
 
-### Presentation Layer
-1. Dashboard tab for trends and analytics
-2. Community network graph tab
-3. Ideology breakdown tab
-4. Source intelligence tab
-5. Chat assistant tab with conversational context
+### Agentic Pipeline (LangGraph)
+- Query understanding
+- Retrieval
+- Aggregation
+- Synthesis
 
-## 8. Core Functionalities
-1. Dataset-level summary metrics.
-2. Trending topic and activity timeline analysis.
-3. Semantic search with AI summary and related follow-up prompts.
-4. Topic cluster map with adjustable cluster count.
-5. Community network visualization with graph metrics.
-6. Ideology distribution and filtering.
-7. Source/domain analysis.
-8. Conversational chat assistant separated from search visualization flow.
-9. Error-safe responses for production stability.
-10. Deployment-ready architecture for cloud hosting.
+### Topic Clustering
+- Embedding normalization
+- UMAP projection to 2D
+- KMeans clustering
+- Auto-labeling using frequent terms
 
-## 9. Behind the Scenes: How It Works
-1. DuckDB powers fast aggregations for timelines, counts, and breakdowns.
-2. ChromaDB stores vector indexes for semantic retrieval.
-3. Sentence Transformer model converts text into embedding vectors.
-4. KMeans and UMAP generate cluster labels and 2D topic map points.
-5. LangGraph orchestrates multi-step query reasoning.
-6. FastAPI acts as orchestration layer between frontend and ML/data components.
-7. React components consume APIs and render interactive visual analytics.
-8. Zustand keeps global state for filters, tabs, search, and chat context.
-9. Docker standardizes runtime across local and cloud environments.
-10. GitHub Actions automates build and deploy to EC2.
+### Network Intelligence
+- Graph construction from interaction edges
+- PageRank
+- Betweenness centrality
+- Louvain communities
 
-## 10. Impact
-This project transforms unstructured Reddit conversations into actionable narrative intelligence by combining:
+### Global Intelligence
+- PyTrends integration
+- Cached fallback strategy
+- Reddit versus global topic comparison
+- Trend lag estimation
 
-1. Data engineering
-2. NLP and semantic AI
-3. Graph and cluster analytics
-4. Interactive visualization
-5. Production-grade deployment practices
+---
+
+## Tech Stack
+
+### Frontend
+- React + Vite
+- Zustand
+- D3.js
+- Recharts
+- Axios
+- Tailwind CSS
+
+### Backend
+- FastAPI
+- Uvicorn
+- LangGraph
+- LangChain
+- Groq API
+- DuckDB
+- ChromaDB
+
+### ML and AI
+- Sentence Transformers
+- Scikit-learn
+- UMAP
+- KMeans
+- NetworkX
+- python-louvain
+
+### DevOps
+- Docker
+- AWS EC2
+- Vercel
+- GitHub Actions
+
+---
+
+## Project Structure (Current)
+
+```text
+Assignment_23BCE157/
+├── DEPLOYMENT.md
+├── Prompts.md
+├── README.md
+├── backend/
+│   ├── .env.example
+│   ├── Dockerfile
+│   ├── Procfile
+│   ├── docker-compose.ec2.yml
+│   ├── main.py
+│   ├── requirements.txt
+│   ├── agents/
+│   │   ├── graph.py
+│   │   └── nodes.py
+│   ├── database/
+│   │   ├── chroma_client.py
+│   │   └── duckdb_client.py
+│   ├── ml/
+│   │   ├── clustering.py
+│   │   ├── embeddings.py
+│   │   ├── global_trends.py
+│   │   └── summarizer.py
+│   └── preprocessing/
+│       └── ingest.py
+├── data/
+│   ├── chroma_db/
+│   ├── embeddings.npy
+│   ├── global_trends_cache.json
+│   ├── metadata.json
+│   └── reddit.duckdb
+├── docs/
+└── frontend/
+    ├── index.html
+    ├── package.json
+    ├── vite.config.js
+    ├── public/
+    └── src/
+        ├── App.jsx
+        ├── api/
+        │   └── index.js
+        ├── components/
+        │   ├── Chatbot.jsx
+        │   ├── Header.jsx
+        │   ├── IdeologyTab.jsx
+        │   ├── NetworkTab.jsx
+        │   ├── SearchPanel.jsx
+        │   ├── SourcesTab.jsx
+        │   ├── TabBar.jsx
+        │   ├── TopicCluster.jsx
+        │   └── TrendingTab.jsx
+        └── store/
+            └── useStore.js
+```
+
+
+
+---
+
+## Frontend Setup
+
+```bash
+cd frontend
+npm install
+cp .env.example .env  # optional if you create .env.example
+```
+
+Create frontend environment file:
+
+```bash
+# frontend/.env
+VITE_API_URL=http://localhost:8000
+```
+
+Run frontend:
+
+```bash
+npm run dev
+```
+---
+
+## Backend Setup
+
+```bash
+cd backend
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+cp .env.example .env
+```
+
+Edit backend environment file and add your API key:
+
+```bash
+# backend/.env
+GROQ_API_KEY=your_groq_api_key_here
+```
+
+Health check:
+
+```bash
+curl http://localhost:8000/health
+```
+
+---
+
+## API Documentation
+
+Base URL: http://localhost:8000
+
+### 1. Health
+
+- Method: GET
+- Endpoint: /health
+- Description: Service liveness check
+
+Example response:
+
+```json
+{
+  "status": "ok"
+}
+```
+
+### 2. Summary Stats
+
+- Method: GET
+- Endpoint: /api/stats
+- Description: Dataset-level aggregate metrics
+
+### 3. Trending
+
+- Method: GET
+- Endpoint: /api/trending
+- Query params: subreddit, ideology, date_from, date_to
+- Description: Timeline + subreddit breakdown + AI summary
+
+### 4. Global Trending
+
+- Method: GET
+- Endpoint: /api/global-trending
+- Query params: region (default GLOBAL), limit (3-30), refresh (bool)
+- Description: External/global trend topics with cache behavior
+
+### 5. Global Insights
+
+- Method: GET
+- Endpoint: /api/global-insights
+- Query params: subreddit, ideology, date_from, date_to, region, limit
+- Description: Reddit versus global trend comparison insights
+
+### 6. Search
+
+- Method: GET
+- Endpoint: /api/search
+- Query params: q, subreddit, ideology, date_from, date_to, limit
+- Description: LangGraph-driven semantic search and synthesis
+
+Example:
+
+```bash
+curl "http://localhost:8000/api/search?q=climate+policy&limit=10"
+```
+
+### 7. Chat
+
+- Method: POST
+- Endpoint: /api/chat
+- Description: Conversational query endpoint with context-aware retrieval
+
+Request body:
+
+```json
+{
+  "q": "What is the trend around student protests?",
+  "history": [
+    { "role": "user", "text": "Show me recent protest discussions" }
+  ],
+  "subreddit": null,
+  "ideology": null,
+  "date_from": null,
+  "date_to": null,
+  "limit": 20
+}
+```
+
+### 8. Network
+
+- Method: GET
+- Endpoint: /api/network
+- Query params: min_connections, post_ids, remove_node
+- Description: Graph edges, nodes, communities, centrality metrics
+
+### 9. Clusters
+
+- Method: GET
+- Endpoint: /api/clusters
+- Query params: n_clusters (1-5), post_ids
+- Description: UMAP coordinates + KMeans labels for topic map
+
+### 10. Ideology
+
+- Method: GET
+- Endpoint: /api/ideology
+- Query params: subreddit, date_from, date_to, post_ids
+- Description: Ideology breakdown distribution
+
+### 11. Sources
+
+- Method: GET
+- Endpoint: /api/sources
+- Query params: subreddit, ideology, date_from, date_to, post_ids, limit
+- Description: Domain/source frequency breakdown
+
+### 12. Posts
+
+- Method: GET
+- Endpoint: /api/posts
+- Query params: subreddit, ideology, date_from, date_to, limit
+- Description: Filtered post list for drill-down views
+
+### 13. Nomic Export
+
+- Method: GET
+- Endpoint: /api/nomic-export
+- Description: Export metadata payload for external atlas-style exploration
+
+---
+
+## Deployment
+
+### Frontend Deployment (Vercel)
+
+1. Push repository to GitHub.
+2. Import project in Vercel.
+3. Set root directory to frontend.
+4. Add environment variable VITE_API_URL with your backend URL.
+5. Deploy.
+
+### Backend Deployment (AWS EC2 + Docker)
+
+1. Launch Ubuntu EC2 instance.
+2. Open inbound ports 22, 80, and 443.
+3. Install Docker and Docker Compose.
+4. Clone repository and go to backend directory.
+5. Create .env and set GROQ_API_KEY.
+6. Build and run:
+
+```bash
+docker compose -f docker-compose.ec2.yml up -d --build
+```
+
+7. Verify:
+
+```bash
+curl http://<EC2_PUBLIC_IP>/health
+curl http://<EC2_PUBLIC_IP>/api/stats
+```
+
+8. Update VITE_API_URL on Vercel to EC2 URL (or your custom HTTPS domain).
+
+Detailed deployment steps are also available in DEPLOYMENT.md.
+
+---
+
+## Screenshots
+
+### Dashboard
+![Dashboard](assets/screenshots/dashboard.png)
+
+### User-Query
+![query](assets/screenshots/query.png)
+
+### Chat Assistant
+![Chat](assets/screenshots/chat.png)
+
+### Network Graph
+![Network](assets/screenshots/network.png)
+
+### Topic Clusters
+![Clusters](assets/screenshots/clusters.png)
+

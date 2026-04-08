@@ -2,7 +2,12 @@ import axios from 'axios'
 
 const BASE_URL = import.meta.env.VITE_API_URL || 'http://13.126.78.244'
 
-const api = axios.create({ baseURL: BASE_URL })
+const api = axios.create({
+  baseURL: BASE_URL,
+  headers: BASE_URL.includes('ngrok')
+    ? { 'ngrok-skip-browser-warning': 'true' }
+    : {},
+})
 
 export const getStats    = ()       => api.get('/api/stats')
 export const getTrending = (params) => api.get('/api/trending', { params })

@@ -17,7 +17,7 @@ Online discussions around politics and social issues are highly fragmented acros
 
 This project solves that by combining data analytics, semantic retrieval, clustering, and conversational interaction into one explainable dashboard.
 
-## 4. Our Approach
+## 4. My Approach
 The project follows an end-to-end pipeline:
 
 1. Collect and preprocess Reddit dataset.

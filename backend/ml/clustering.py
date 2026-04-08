@@ -12,7 +12,7 @@ from ml.embeddings import get_chroma_collection, model
 def get_topic_clusters(
     n_clusters:  int  = 10,
     post_ids:    list = None,
-    max_posts:   int  = 2000
+    max_posts:   int  = 500
 ):
     collection = get_chroma_collection()
 

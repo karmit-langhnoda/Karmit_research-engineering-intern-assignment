@@ -4,6 +4,7 @@ sys.path.append(str(Path(__file__).resolve().parent.parent))
 import os
 import json
 from pathlib import Path
+from threading import Lock
 import chromadb
 from sentence_transformers import SentenceTransformer
 from database.duckdb_client import get_connection
@@ -12,6 +13,10 @@ from database.duckdb_client import get_connection
 BASE_DIR    = Path(__file__).resolve().parent.parent.parent
 CHROMA_PATH = BASE_DIR / "data" / "chroma_db"
 
+_chroma_lock = Lock()
+_chroma_client = None
+_chroma_collection = None
+
 # ─── Model (loads once) ───────────────────────────────────
 print("🔄 Loading embedding model...")
 model = SentenceTransformer("all-MiniLM-L6-v2")
@@ -19,12 +24,20 @@ print("✅ Model loaded")
 
 # ─── Chroma Client ────────────────────────────────────────
 def get_chroma_collection():
-    client = chromadb.PersistentClient(path=str(CHROMA_PATH))
-    collection = client.get_or_create_collection(
-        name="reddit_posts",
-        metadata={"hnsw:space": "cosine"}
-    )
-    return collection
+    global _chroma_client, _chroma_collection
+
+    if _chroma_collection is not None:
+        return _chroma_collection
+
+    with _chroma_lock:
+        if _chroma_collection is None:
+            _chroma_client = chromadb.PersistentClient(path=str(CHROMA_PATH))
+            _chroma_collection = _chroma_client.get_or_create_collection(
+                name="reddit_posts",
+                metadata={"hnsw:space": "cosine"}
+            )
+
+    return _chroma_collection
 
 # ─── Embed All Posts ──────────────────────────────────────
 def embed_all_posts(batch_size: int = 500):

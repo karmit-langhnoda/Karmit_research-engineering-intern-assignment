@@ -130,16 +130,31 @@ def search(
     date_to:    Optional[float] = None,
     limit:      int             = 50
 ):
-    # run full LangGraph agent
-    result = run_agent(
-        query   = q,
-        filters = {
-            "subreddit": subreddit,
-            "ideology":  ideology,
-            "date_from": date_from,
-            "date_to":   date_to,
+    try:
+        # run full LangGraph agent
+        result = run_agent(
+            query   = q,
+            filters = {
+                "subreddit": subreddit,
+                "ideology":  ideology,
+                "date_from": date_from,
+                "date_to":   date_to,
+            }
+        )
+    except Exception as exc:
+        return {
+            "posts":            [],
+            "timeline":         [],
+            "subreddits":       [],
+            "ideologies":       [],
+            "domains":          [],
+            "summary":          "Search failed due to a backend error.",
+            "timeline_summary": "",
+            "related_queries":  [],
+            "total":            0,
+            "error":            str(exc),
+            "core_topic":       ""
         }
-    )
 
     # handle error from agent
     if result.get("error"):

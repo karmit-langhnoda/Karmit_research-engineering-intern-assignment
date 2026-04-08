@@ -33,6 +33,11 @@ app.add_middleware(
     allow_headers  = ["*"],
 )
 
+
+@app.get("/health")
+def health():
+    return {"status": "ok"}
+
 # ─── 1. Summary Stats ─────────────────────────────────
 @app.get("/api/stats")
 def stats():

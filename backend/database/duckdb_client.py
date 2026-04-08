@@ -1,14 +1,44 @@
 import duckdb
+import os
 from pathlib import Path
 from typing import Optional
 
 # ─── Path ─────────────────────────────────────────────────
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
-DB_PATH  = BASE_DIR / "data" / "reddit.duckdb"
+
+
+def get_db_path() -> Path:
+    env_path = os.getenv("DUCKDB_PATH")
+    if env_path:
+        return Path(env_path).expanduser().resolve()
+    return (BASE_DIR / "data" / "reddit.duckdb").resolve()
+
+
+def ensure_posts_table(con, db_path: Path):
+    try:
+        con.execute("SELECT 1 FROM posts LIMIT 1")
+    except Exception as exc:
+        tables = [r[0] for r in con.execute("SHOW TABLES").fetchall()]
+        table_list = ", ".join(tables) if tables else "<none>"
+        raise RuntimeError(
+            f"DuckDB at '{db_path}' does not contain required table 'posts'. "
+            f"Available tables: {table_list}."
+        ) from exc
 
 # ─── Connection ───────────────────────────────────────────
 def get_connection():
-    return duckdb.connect(str(DB_PATH))
+    db_path = get_db_path()
+
+    if not db_path.exists():
+        raise FileNotFoundError(
+            f"DuckDB file not found at '{db_path}'. "
+            "Set DUCKDB_PATH or mount /app/data with reddit.duckdb."
+        )
+
+    # Use read_only to avoid accidental creation of empty DB files in production.
+    con = duckdb.connect(str(db_path), read_only=True)
+    ensure_posts_table(con, db_path)
+    return con
 
 # ─── Get All Posts (with filters) ─────────────────────────
 def get_posts(

@@ -158,14 +158,33 @@ jobs:
             sudo docker image prune -af
             sudo docker pull "${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest"
 
+            DATA_DIR="$HOME/reddit-dashboard-data"
+            mkdir -p "$DATA_DIR"
+
+            # One-time seed from image if host data directory is empty.
+            if [ ! -f "$DATA_DIR/reddit.duckdb" ]; then
+              echo "Host DB not found. Attempting to seed data from Docker image..."
+              CID=$(sudo docker create "${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest")
+              sudo docker cp "$CID":/app/data/. "$DATA_DIR" || true
+              sudo docker rm "$CID" >/dev/null 2>&1 || true
+            fi
+
+            if [ ! -f "$DATA_DIR/reddit.duckdb" ]; then
+              echo "ERROR: reddit.duckdb is missing on EC2 host at $DATA_DIR"
+              echo "Upload your data directory to EC2 and redeploy."
+              exit 1
+            fi
+
             cat > ~/.env << 'EOF'
             GROQ_API_KEY=${{ secrets.GROQ_API_KEY }}
+            DUCKDB_PATH=/app/data/reddit.duckdb
             EOF
 
             sudo docker run -d \
               --name reddit-dashboard-api \
               --restart unless-stopped \
               -p 80:8000 \
+              -v "$DATA_DIR:/app/data" \
               --env-file ~/.env \
               "${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest"
 

@@ -19,10 +19,23 @@ _chroma_lock = Lock()
 _chroma_client = None
 _chroma_collection = None
 
-# ─── Model (loads once) ───────────────────────────────────
-print("🔄 Loading embedding model...")
-model = SentenceTransformer("all-MiniLM-L6-v2")
-print("✅ Model loaded")
+_model_lock = Lock()
+_model = None
+
+
+def get_embedding_model():
+    global _model
+
+    if _model is not None:
+        return _model
+
+    with _model_lock:
+        if _model is None:
+            print("Loading embedding model...")
+            _model = SentenceTransformer("all-MiniLM-L6-v2")
+            print("Embedding model loaded")
+
+    return _model
 
 # ─── Chroma Client ────────────────────────────────────────
 def get_chroma_collection():
@@ -88,6 +101,7 @@ def embed_all_posts(batch_size: int = 500):
             for row in batch
         ]
 
+        model = get_embedding_model()
         embeddings = model.encode(
             texts,
             show_progress_bar=False,

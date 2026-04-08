@@ -6,7 +6,7 @@ from pathlib import Path
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import normalize
 import umap.umap_ as umap
-from ml.embeddings import get_chroma_collection, model
+from ml.embeddings import get_chroma_collection, get_embedding_model
 
 # ─── Get Clusters ─────────────────────────────────────────
 def get_topic_clusters(
@@ -54,6 +54,7 @@ def get_topic_clusters(
     # ── Ensure embeddings exist ───────────────────────────
     if len(raw_embeddings) != len(ids):
         try:
+            model = get_embedding_model()
             raw_embeddings = model.encode(
                 [d if d else "empty post" for d in documents],
                 show_progress_bar=False,

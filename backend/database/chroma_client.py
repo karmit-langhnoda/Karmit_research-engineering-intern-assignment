@@ -4,7 +4,7 @@ sys.path.append(str(Path(__file__).resolve().parent.parent))
 from pathlib import Path
 from langdetect import detect
 from deep_translator import GoogleTranslator
-from ml.embeddings import get_chroma_collection, model
+from ml.embeddings import get_chroma_collection, get_embedding_model
 
 # ─── Semantic Search ──────────────────────────────────────
 def semantic_search(
@@ -53,6 +53,7 @@ def semantic_search(
         where["flair"] = ideology
 
     # ── Embed query ───────────────────────────────────────
+    model = get_embedding_model()
     query_embedding = model.encode([query]).tolist()[0]
 
     # ── Search ChromaDB ───────────────────────────────────

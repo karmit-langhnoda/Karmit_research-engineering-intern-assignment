@@ -381,7 +381,7 @@ def network(
 # ─── 5. Topic Clusters ────────────────────────────────
 @app.get("/api/clusters")
 def clusters(
-    n_clusters: int           = Query(default=5, ge=2, le=8),
+    n_clusters: int           = Query(default=2, ge=1, le=5),
     post_ids:   Optional[str] = None
 ):
     ids = post_ids.split(",") if post_ids else None

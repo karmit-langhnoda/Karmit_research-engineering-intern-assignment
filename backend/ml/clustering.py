@@ -10,7 +10,7 @@ from ml.embeddings import get_chroma_collection, get_embedding_model
 
 # ─── Get Clusters ─────────────────────────────────────────
 def get_topic_clusters(
-    n_clusters:  int  = 10,
+    n_clusters:  int  = 2,
     post_ids:    list = None,
     max_posts:   int  = 500
 ):
@@ -71,7 +71,7 @@ def get_topic_clusters(
 
     # ── Clamp n_clusters ──────────────────────────────────
     # keep upper bound safe for KMeans (must be <= n_samples)
-    n_clusters = max(2, min(n_clusters, min(50, len(ids))))
+    n_clusters = max(1, min(n_clusters, min(5, len(ids))))
 
     # ── Normalize embeddings ──────────────────────────────
     embeddings_norm = normalize(embeddings)

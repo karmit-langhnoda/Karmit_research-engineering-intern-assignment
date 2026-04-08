@@ -12,7 +12,7 @@ export default function TopicCluster() {
   const [data,       setData]       = useState(null)
   const [loading,    setLoading]    = useState(true)
   const [error,      setError]      = useState('')
-  const [nClusters,  setNClusters]  = useState(10)
+  const [nClusters,  setNClusters]  = useState(2)
   const [selected,   setSelected]   = useState(null)
   const [hoveredPoint, setHoveredPoint] = useState(null)
   const svgRef  = useRef(null)
@@ -90,20 +90,20 @@ export default function TopicCluster() {
               </span>
             </label>
             <div className="flex items-center gap-3 mt-2">
-              <span style={{ color: '#5b6b82', fontSize: '11px' }}>2</span>
+              <span style={{ color: '#5b6b82', fontSize: '11px' }}>1</span>
               <input
                 ref={sliderRef}
                 type="range"
-                min={2}
-                max={50}
+                min={1}
+                max={5}
                 value={nClusters}
                 onChange={e => setNClusters(Number(e.target.value))}
                 style={{ width: '200px' }}
               />
-              <span style={{ color: '#5b6b82', fontSize: '11px' }}>50</span>
+              <span style={{ color: '#5b6b82', fontSize: '11px' }}>5</span>
             </div>
             <p style={{ color: '#5b6b82', fontSize: '11px', marginTop: '4px' }}>
-              Drag to change · Extreme values handled gracefully
+              Drag to change between 1 and 5 clusters
             </p>
           </div>
 

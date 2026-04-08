@@ -11,7 +11,9 @@ from database.duckdb_client import get_connection
 
 # ─── Paths ────────────────────────────────────────────────
 BASE_DIR    = Path(__file__).resolve().parent.parent.parent
-CHROMA_PATH = BASE_DIR / "data" / "chroma_db"
+CHROMA_PATH = Path(
+    os.getenv("CHROMA_PATH", str(BASE_DIR / "data" / "chroma_db"))
+).resolve()
 
 _chroma_lock = Lock()
 _chroma_client = None
@@ -32,10 +34,23 @@ def get_chroma_collection():
     with _chroma_lock:
         if _chroma_collection is None:
             _chroma_client = chromadb.PersistentClient(path=str(CHROMA_PATH))
-            _chroma_collection = _chroma_client.get_or_create_collection(
-                name="reddit_posts",
-                metadata={"hnsw:space": "cosine"}
-            )
+            try:
+                # Read-first mode prevents write failures on locked/read-only volumes.
+                _chroma_collection = _chroma_client.get_collection(
+                    name="reddit_posts"
+                )
+            except Exception:
+                if os.getenv("CHROMA_AUTO_CREATE", "0") == "1":
+                    _chroma_collection = _chroma_client.get_or_create_collection(
+                        name="reddit_posts",
+                        metadata={"hnsw:space": "cosine"}
+                    )
+                else:
+                    raise RuntimeError(
+                        "Could not open Chroma collection 'reddit_posts'. "
+                        "Ensure /app/data/chroma_db exists and is readable. "
+                        "Set CHROMA_AUTO_CREATE=1 only when you intentionally want to write/create it."
+                    )
 
     return _chroma_collection
 

@@ -56,7 +56,16 @@ def semantic_search(
     query_embedding = model.encode([query]).tolist()[0]
 
     # ── Search ChromaDB ───────────────────────────────────
-    collection = get_chroma_collection()
+    try:
+        collection = get_chroma_collection()
+    except Exception as exc:
+        return {
+            "results": [],
+            "message": f"Chroma unavailable: {exc}",
+            "query_used": query,
+            "original_query": original_query,
+            "translated": translated
+        }
 
     search_kwargs = {
         "query_embeddings": [query_embedding],

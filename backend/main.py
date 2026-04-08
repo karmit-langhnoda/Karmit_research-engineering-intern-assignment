@@ -290,14 +290,23 @@ def network(
 # ─── 5. Topic Clusters ────────────────────────────────
 @app.get("/api/clusters")
 def clusters(
-    n_clusters: int           = 10,
+    n_clusters: int           = Query(default=5, ge=2, le=8),
     post_ids:   Optional[str] = None
 ):
     ids = post_ids.split(",") if post_ids else None
-    return get_topic_clusters(
-        n_clusters = n_clusters,
-        post_ids   = ids
-    )
+    try:
+        return get_topic_clusters(
+            n_clusters = n_clusters,
+            post_ids   = ids
+        )
+    except Exception as exc:
+        return {
+            "error": f"Clustering failed: {exc}",
+            "points": [],
+            "clusters": [],
+            "n_clusters": n_clusters,
+            "total": 0
+        }
 
 # ─── 6. Ideology Map ──────────────────────────────────
 @app.get("/api/ideology")

@@ -1,18 +1,15 @@
 import { useState, useRef, useEffect } from 'react'
 import useStore from '../store/useStore'
-import { getSearch } from '../api'
+import { postChat } from '../api'
 
 export default function Chatbot() {
-  const [messages, setMessages] = useState([
-    {
-      role: 'assistant',
-      text: "Hi! I'm your Reddit narrative investigator. Ask me anything about the dataset — topics, communities, ideologies, or sources."
-    }
-  ])
+  const messages = useStore(state => state.chatMessages)
   const [input,    setInput]    = useState('')
   const [loading,  setLoading]  = useState(false)
   const bottomRef = useRef(null)
-  const { setSearchResults, setSearchQuery } = useStore()
+  const {
+    appendChatMessage,
+  } = useStore()
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -23,17 +20,14 @@ export default function Chatbot() {
     if (!q || loading) return
 
     // add user message
-    setMessages(prev => [...prev, { role: 'user', text: q }])
+    appendChatMessage({ role: 'user', text: q })
     setInput('')
     setLoading(true)
 
     try {
-      const res  = await getSearch({ q })
+      const history = messages.slice(-12).map(m => ({ role: m.role, text: m.text }))
+      const res  = await postChat({ q, history })
       const data = res.data
-
-      // update dashboard
-      setSearchQuery(q)
-      setSearchResults(data)
 
       // build response message
       let reply = ''
@@ -48,43 +42,47 @@ export default function Chatbot() {
           `Most active in r/${data.subreddits?.[0]?.subreddit || 'various communities'}.`
       }
 
-      setMessages(prev => [...prev, {
+      appendChatMessage({
         role:            'assistant',
-        text:            reply,
+        text:            data.answer || reply,
         related_queries: data.related_queries || [],
         total:           data.total
-      }])
+      })
 
     } catch (err) {
-      setMessages(prev => [...prev, {
+      appendChatMessage({
         role: 'assistant',
         text: 'Something went wrong. Please try again.'
-      }])
+      })
     } finally {
       setLoading(false)
     }
   }
 
   const handleRelated = async (q) => {
-    setMessages(prev => [...prev, { role: 'user', text: q }])
+    appendChatMessage({ role: 'user', text: q })
     setInput('')
     setLoading(true)
 
     try {
-      const res  = await getSearch({ q })
+      const history = messages.slice(-12).map(m => ({ role: m.role, text: m.text }))
+      const res  = await postChat({ q, history })
       const data = res.data
-      setSearchQuery(q)
-      setSearchResults(data)
 
-      const reply = data.summary ||
+      const reply = data.answer || data.summary ||
         `Found ${data.total} posts about "${q}".`
 
-      setMessages(prev => [...prev, {
+      appendChatMessage({
         role:            'assistant',
         text:            reply,
         related_queries: data.related_queries || [],
         total:           data.total
-      }])
+      })
+    } catch (err) {
+      appendChatMessage({
+        role: 'assistant',
+        text: 'Something went wrong. Please try again.'
+      })
     } finally {
       setLoading(false)
     }

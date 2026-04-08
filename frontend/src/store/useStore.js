@@ -21,6 +21,14 @@ const useStore = create((set) => ({
   // ── Stats ───────────────────────────────────────────
   stats: null,
 
+  // ── Chat ────────────────────────────────────────────
+  chatMessages: [
+    {
+      role: 'assistant',
+      text: "Hi! I'm your Reddit narrative investigator. Ask me anything about the dataset — topics, communities, ideologies, or sources."
+    }
+  ],
+
   // ── Actions ─────────────────────────────────────────
   setFilters: (newFilters) =>
     set((state) => ({
@@ -41,6 +49,22 @@ const useStore = create((set) => ({
 
   setStats: (stats) =>
     set({ stats }),
+
+  setChatMessages: (messages) =>
+    set({ chatMessages: messages }),
+
+  appendChatMessage: (message) =>
+    set((state) => ({ chatMessages: [...state.chatMessages, message] })),
+
+  clearChat: () =>
+    set({
+      chatMessages: [
+        {
+          role: 'assistant',
+          text: "Hi! I'm your Reddit narrative investigator. Ask me anything about the dataset — topics, communities, ideologies, or sources."
+        }
+      ]
+    }),
 
   clearSearch: () =>
     set({ searchQuery: '', searchResults: null }),

@@ -5,6 +5,7 @@ sys.path.append(str(Path(__file__).resolve().parent))
 from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Optional
+from pydantic import BaseModel
 import networkx as nx
 from community import best_partition
 
@@ -37,6 +38,35 @@ app.add_middleware(
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
+
+class ChatMessage(BaseModel):
+    role: str
+    text: str
+
+
+class ChatRequest(BaseModel):
+    q: str
+    history: list[ChatMessage] = []
+    subreddit: Optional[str] = None
+    ideology: Optional[str] = None
+    date_from: Optional[float] = None
+    date_to: Optional[float] = None
+    limit: int = 50
+
+
+def _build_chat_query(q: str, history: list[ChatMessage]) -> str:
+    # Keep only recent user turns to limit prompt size.
+    recent_user_turns = [m.text for m in history if m.role == "user"][-4:]
+    if not recent_user_turns:
+        return q
+
+    context = "\n".join([f"- {m}" for m in recent_user_turns])
+    return (
+        "Use the conversation context to interpret the latest user question.\n"
+        f"Conversation context:\n{context}\n\n"
+        f"Latest user question: {q}"
+    )
 
 # ─── 1. Summary Stats ─────────────────────────────────
 @app.get("/api/stats")
@@ -184,6 +214,67 @@ def search(
         "total":            len(result["posts"]),
         "error":            None,
         "core_topic":       result.get("core_topic", "")
+    }
+
+
+@app.post("/api/chat")
+def chat(req: ChatRequest):
+    contextual_query = _build_chat_query(req.q, req.history)
+
+    try:
+        result = run_agent(
+            query=contextual_query,
+            filters={
+                "subreddit": req.subreddit,
+                "ideology": req.ideology,
+                "date_from": req.date_from,
+                "date_to": req.date_to,
+            },
+        )
+    except Exception as exc:
+        return {
+            "answer": "Chat failed due to a backend error.",
+            "summary": "",
+            "posts": [],
+            "timeline": [],
+            "subreddits": [],
+            "ideologies": [],
+            "domains": [],
+            "related_queries": [],
+            "total": 0,
+            "error": str(exc),
+            "core_topic": "",
+        }
+
+    if result.get("error"):
+        return {
+            "answer": result["error"],
+            "summary": result["error"],
+            "posts": [],
+            "timeline": [],
+            "subreddits": [],
+            "ideologies": [],
+            "domains": [],
+            "related_queries": [],
+            "total": 0,
+            "error": result["error"],
+            "core_topic": "",
+        }
+
+    answer = result.get("summary") or "I analyzed the conversation context and found related results."
+
+    return {
+        "answer": answer,
+        "summary": result.get("summary", ""),
+        "posts": result.get("posts", [])[: req.limit],
+        "timeline": result.get("timeline", []),
+        "subreddits": result.get("subreddits", []),
+        "ideologies": result.get("ideologies", []),
+        "domains": result.get("domains", []),
+        "related_queries": result.get("related_queries", []),
+        "total": len(result.get("posts", [])),
+        "error": None,
+        "core_topic": result.get("core_topic", ""),
     }
 
 # ─── 4. Network Graph ─────────────────────────────────

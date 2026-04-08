@@ -20,10 +20,6 @@ export default function SearchPanel() {
     clearSearch
   } = useStore()
 
-  const [subreddit, setSubreddit] = useState('')
-  const [ideology,  setIdeology]  = useState('')
-  const [sortBy,    setSortBy]    = useState('relevance')
-
   if (!searchResults) return null
 
   const {
@@ -40,26 +36,7 @@ export default function SearchPanel() {
     core_topic        = ''
   } = searchResults
 
-  // apply sort
-  const sortedPosts = [...posts].sort((a, b) => {
-    if (sortBy === 'score')    return b.score - a.score
-    if (sortBy === 'comments') return b.num_comments - a.num_comments
-    return 0
-  })
-
-  const handleFilter = async () => {
-    setIsSearching(true)
-    try {
-      const res = await getSearch({
-        q:         searchQuery,
-        subreddit: subreddit || undefined,
-        ideology:  ideology  || undefined,
-      })
-      setSearchResults(res.data)
-    } finally {
-      setIsSearching(false)
-    }
-  }
+  const sortedPosts = posts
 
   return (
     <div className="flex flex-col gap-6">
@@ -107,97 +84,6 @@ export default function SearchPanel() {
           </button>
         </div>
 
-        {/* Filters */}
-        {!error && (
-          <div className="flex gap-3 mt-4 flex-wrap items-end">
-            <div>
-              <label style={{ color: '#5b6b82', fontSize: '11px', display: 'block', marginBottom: '4px' }}>
-                SUBREDDIT
-              </label>
-              <select
-                value={subreddit}
-                onChange={e => setSubreddit(e.target.value)}
-                style={{
-                  background: '#f8fafc',
-                  border: '1px solid #dbe4f0',
-                  color: '#0f1b2d',
-                  padding: '6px 10px',
-                  borderRadius: '6px',
-                  fontSize: '12px'
-                }}
-              >
-                <option value="">All subreddits</option>
-                {subreddits.map(s => (
-                  <option key={s.subreddit} value={s.subreddit}>
-                    r/{s.subreddit} ({s.post_count})
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label style={{ color: '#5b6b82', fontSize: '11px', display: 'block', marginBottom: '4px' }}>
-                IDEOLOGY
-              </label>
-              <select
-                value={ideology}
-                onChange={e => setIdeology(e.target.value)}
-                style={{
-                  background: '#f8fafc',
-                  border: '1px solid #dbe4f0',
-                  color: '#0f1b2d',
-                  padding: '6px 10px',
-                  borderRadius: '6px',
-                  fontSize: '12px'
-                }}
-              >
-                <option value="">All ideologies</option>
-                {ideologies.map(i => (
-                  <option key={i.ideology} value={i.ideology}>
-                    {i.ideology} ({i.post_count})
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label style={{ color: '#5b6b82', fontSize: '11px', display: 'block', marginBottom: '4px' }}>
-                SORT BY
-              </label>
-              <select
-                value={sortBy}
-                onChange={e => setSortBy(e.target.value)}
-                style={{
-                  background: '#f8fafc',
-                  border: '1px solid #dbe4f0',
-                  color: '#0f1b2d',
-                  padding: '6px 10px',
-                  borderRadius: '6px',
-                  fontSize: '12px'
-                }}
-              >
-                <option value="relevance">Relevance</option>
-                <option value="score">Score</option>
-                <option value="comments">Comments</option>
-              </select>
-            </div>
-
-            <button
-              onClick={handleFilter}
-              style={{
-                padding: '6px 16px',
-                borderRadius: '6px',
-                background: '#0b5fff',
-                color: '#fff',
-                border: 'none',
-                cursor: 'pointer',
-                fontSize: '12px'
-              }}
-            >
-              Apply
-            </button>
-          </div>
-        )}
       </div>
 
       {/* ── Error State ──────────────────────────── */}

@@ -38,20 +38,22 @@ Online narratives are fragmented across communities, ideologies, and sources. Th
 - Deploy frontend on Vercel and backend on AWS EC2 with Docker
 
 ---
+## Screenshots
 
-## System Architecture
+### Dashboard
+![Dashboard](assets/screenshots/dashboard.png)
 
-### High-Level Architecture
-![High Level Architecture](assets/architecture/high_level.png)
+### User-Query
+![query](assets/screenshots/query.png)
 
-### End-to-End Flow
-![System Flow](assets/architecture/flow.png)
+### Chat Assistant
+![Chat](assets/screenshots/chat.png)
 
-### Search Flow
-![Search Flow](assets/architecture/search_flow.png)
+### Network Graph
+![Network](assets/screenshots/network.png)
 
-### Chat Flow (/api/chat)
-![Chat Flow](assets/architecture/chat_flow.png)
+### Topic Clusters
+![Clusters](assets/screenshots/clusters.png)
 
 ---
 
@@ -431,20 +433,16 @@ Detailed deployment steps are also available in DEPLOYMENT.md.
 
 ---
 
-## Screenshots
+## System Architecture
 
-### Dashboard
-![Dashboard](assets/screenshots/dashboard.png)
+### High-Level Architecture
+![High Level Architecture](assets/architecture/high_level.png)
 
-### User-Query
-![query](assets/screenshots/query.png)
+### End-to-End Flow
+![System Flow](assets/architecture/flow.png)
 
-### Chat Assistant
-![Chat](assets/screenshots/chat.png)
+### Search Flow
+![Search Flow](assets/architecture/search_flow.png)
 
-### Network Graph
-![Network](assets/screenshots/network.png)
-
-### Topic Clusters
-![Clusters](assets/screenshots/clusters.png)
-
+### Chat Flow (/api/chat)
+![Chat Flow](assets/architecture/chat_flow.png)

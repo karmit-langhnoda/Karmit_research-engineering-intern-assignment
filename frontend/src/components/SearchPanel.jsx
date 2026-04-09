@@ -6,17 +6,10 @@ import {
 import useStore from '../store/useStore'
 import { getSearch } from '../api'
 
-const COLORS = [
-  '#0b5fff','#0891b2','#0f766e','#d97706',
-  '#dc2626','#7c3aed','#db2777','#0f766e',
-]
-
 export default function SearchPanel() {
   const {
     searchQuery,
     searchResults,
-    setSearchResults,
-    setIsSearching,
     clearSearch
   } = useStore()
 
@@ -25,9 +18,6 @@ export default function SearchPanel() {
   const {
     posts             = [],
     timeline          = [],
-    subreddits        = [],
-    ideologies        = [],
-    domains           = [],
     summary           = '',
     timeline_summary  = '',
     related_queries   = [],
@@ -35,8 +25,6 @@ export default function SearchPanel() {
     error             = null,
     core_topic        = ''
   } = searchResults
-
-  const sortedPosts = posts
 
   return (
     <div className="flex flex-col gap-6">
@@ -227,61 +215,6 @@ export default function SearchPanel() {
             </div>
           )}
 
-          {/* Breakdown Row */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr 1fr',
-            gap: '16px'
-          }}>
-            <MiniCard title="🏘️ Communities">
-              {subreddits.slice(0, 6).map((s, i) => (
-                <BreakdownRow
-                  key={s.subreddit}
-                  label={`r/${s.subreddit}`}
-                  value={s.post_count}
-                  max={subreddits[0]?.post_count}
-                  color={COLORS[i % COLORS.length]}
-                />
-              ))}
-            </MiniCard>
-
-            <MiniCard title="🧭 Ideologies">
-              {ideologies.length === 0 ? (
-                <p style={{ color: '#5b6b82', fontSize: '12px' }}>
-                  No ideology flair data
-                </p>
-              ) : (
-                ideologies.slice(0, 6).map((item, i) => (
-                  <BreakdownRow
-                    key={item.ideology}
-                    label={item.ideology}
-                    value={item.post_count}
-                    max={ideologies[0]?.post_count}
-                    color={COLORS[i % COLORS.length]}
-                  />
-                ))
-              )}
-            </MiniCard>
-
-            <MiniCard title="🔗 Sources">
-              {domains.length === 0 ? (
-                <p style={{ color: '#5b6b82', fontSize: '12px' }}>
-                  No external sources
-                </p>
-              ) : (
-                domains.slice(0, 6).map((d, i) => (
-                  <BreakdownRow
-                    key={d.domain}
-                    label={d.domain}
-                    value={d.share_count}
-                    max={domains[0]?.share_count}
-                    color={COLORS[i % COLORS.length]}
-                  />
-                ))
-              )}
-            </MiniCard>
-          </div>
-
           {/* Posts List */}
           <div style={{
             background: '#ffffff',
@@ -298,7 +231,7 @@ export default function SearchPanel() {
               📋 All {total} Posts
             </h3>
             <div className="flex flex-col gap-2">
-              {sortedPosts.map(post => (
+              {posts.map(post => (
                 <PostRow key={post.id} post={post} />
               ))}
             </div>
@@ -339,60 +272,6 @@ function RelatedQuery({ query }) {
     >
       → {query}
     </button>
-  )
-}
-
-// ── Mini Card ─────────────────────────────────────────
-function MiniCard({ title, children }) {
-  return (
-    <div style={{
-      background: '#ffffff',
-      border: '1px solid #dbe4f0',
-      borderRadius: '12px',
-      padding: '16px'
-    }}>
-      <h4 style={{
-        color: '#0f1b2d',
-        fontSize: '13px',
-        fontWeight: '600',
-        marginBottom: '12px'
-      }}>
-        {title}
-      </h4>
-      <div className="flex flex-col gap-2">
-        {children}
-      </div>
-    </div>
-  )
-}
-
-// ── Breakdown Row ─────────────────────────────────────
-function BreakdownRow({ label, value, max, color }) {
-  const pct = max > 0 ? (value / max) * 100 : 0
-  return (
-    <div>
-      <div className="flex justify-between mb-1">
-        <span style={{
-          color: '#24364d',
-          fontSize: '11px',
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-          whiteSpace: 'nowrap',
-          maxWidth: '140px'
-        }}>
-          {label}
-        </span>
-        <span style={{ color: '#5b6b82', fontSize: '11px' }}>{value}</span>
-      </div>
-      <div style={{ background: '#f8fafc', borderRadius: '3px', height: '4px' }}>
-        <div style={{
-          width: `${pct}%`,
-          height: '100%',
-          background: color,
-          borderRadius: '3px'
-        }} />
-      </div>
-    </div>
   )
 }
 

@@ -11,8 +11,7 @@ Video-Demo: https://drive.google.com/drive/folders/1QOYCdph1ERCP4vCwbtC6WLWElnkt
 
 ## Live Project Links
 
-Project-Link: https://karmit-research-engineering-intern-assignment-h1t2i5i58.vercel.app
-
+Project-Link:https://karmit-research-engineering-intern.vercel.app/
 ---
 
 ## Problem We Solve
